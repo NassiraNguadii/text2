@@ -14,6 +14,8 @@ Bienvenue à Textra's documentation!
    :caption: Table des matières:
 
    Documentation/Scripts/1_Project.rst
+   Documentation/Scripts/2_Project.rst
+
    Documentation/Scripts/2_Equipe.rst
    Documentation/Scripts/3_OCR.rst
    Documentation/Scripts/4_Prétraitement.rst
