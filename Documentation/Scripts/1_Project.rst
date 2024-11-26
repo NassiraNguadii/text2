@@ -1,7 +1,7 @@
 Le Pipeline
 ===========
 
-.. figure:: /Documentation/Images/Pipeline.png
+.. figure:: /Documentation/Images/image.png
    :width: 100%
    :align: center
    :alt: Alternative text for the image
