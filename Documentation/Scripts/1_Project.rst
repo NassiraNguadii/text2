@@ -1,6 +1,14 @@
 Pipeline d'Analyses Sanguines
 ============================
 
+.. figure:: /Documentation/Images/Pipeline.png
+   :width: 100%
+   :align: center
+   :alt: Pipeline de traitement des analyses sanguines
+   :name: Pipeline
+
+   Diagramme du pipeline de traitement des analyses sanguines
+
 Introduction
 -----------
 Ce document détaille le pipeline de traitement automatisé des analyses sanguines, transformant les données brutes en rapports médicaux exploitables.
