@@ -7,7 +7,6 @@ Pipeline d'Analyses Sanguines
    :alt: Pipeline de traitement des analyses sanguines
    :name: Pipeline
 
-   Diagramme du pipeline de traitement des analyses sanguines
 
 Introduction
 -----------
