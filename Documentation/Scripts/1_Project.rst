@@ -1,7 +1,7 @@
 Pipeline d'Analyses Sanguines
 ============================
 
-.. figure:: /Documentation/Images/Pipeline.png
+.. figure:: /Documentation/Images/Pipeline.jpeg
    :width: 100%
    :align: center
    :alt: Pipeline de traitement des analyses sanguines
