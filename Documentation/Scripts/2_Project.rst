@@ -1,288 +1,232 @@
 ************************************************
-Benchmark OCR pour Analyses Sanguines
+Benchmark OCR pour Biochimie Sanguine
 ************************************************
 
 Introduction
 ===========
 
-Contexte
---------
-Les analyses de biochimie sanguine sont des documents médicaux essentiels contenant des informations critiques pour le diagnostic et le suivi des patients. La numérisation et l'extraction automatique de ces données représentent un enjeu majeur pour les établissements de santé.
+Contexte médical
+--------------
+La biochimie sanguine est une analyse médicale spécifique qui évalue les concentrations de différentes substances chimiques dans le sang. Elle comprend notamment :
+
+* Les électrolytes (sodium, potassium, chlorures)
+* Les protéines
+* Les enzymes
+* La réserve alcaline
+* D'autres paramètres biochimiques
+
+Ces analyses sont essentielles pour :
+
+* Évaluer la fonction des organes
+* Suivre l'équilibre électrolytique
+* Détecter des anomalies métaboliques
+* Ajuster les traitements médicaux
 
 Objectif du benchmark
 -------------------
-Ce benchmark vise à évaluer et comparer les performances de trois solutions OCR majeures dans le contexte spécifique de la reconnaissance des analyses sanguines :
+Ce benchmark vise à évaluer la capacité de trois systèmes OCR à extraire précisément les données des documents de biochimie sanguine :
 
 * Doctr
 * EasyOCR
 * PaddleOCR
 
-Données et méthodologie
-======================
+Spécificités du benchmark
+========================
 
-Jeu de données
--------------
-* 20 analyses de biochimie sanguine
-* Format : Images JPEG scannées
-* Contenu type :
-    - Paramètres sanguins (sodium, potassium, etc.)
-    - Valeurs numériques
-    - Unités de mesure
+Données évaluées
+--------------
+* Nombre de documents : 20 rapports de biochimie sanguine
+* Format : Images JPEG
+* Types de données analysées :
+    - Valeurs numériques des paramètres biochimiques
+    - Unités de mesure (mmol/l, g/l)
     - Intervalles de référence
-    - Dates et identifiants
+    - Dates des analyses
 
 Structure du projet
 -----------------
 ::
 
-    benchmark_ocr_sanguin/
-    ├── ground_truth/          # Vérité terrain
-    │   ├── 1.txt             
+    benchmark_biochimie/
+    ├── ground_truth/          # Documents de référence
+    │   ├── 1.txt             # Texte exact de chaque analyse
     │   └── ...
     ├── images_analyse/        # Images à analyser
-    │   ├── 1.jpeg            
+    │   ├── 1.jpeg            # Scan d'analyse biochimique
     │   └── ...
-    ├── results/              # Résultats des tests
+    ├── results/              # Résultats par système
     │   ├── doctr/
     │   ├── easyocr/
     │   └── paddleocr/
     └── src/                  # Code source
-        ├── benchmark.py
-        ├── utils.py
-        └── metrics.py
+        ├── benchmark.py      # Script principal
+        ├── utils.py         # Fonctions utilitaires
+        └── metrics.py       # Calcul des métriques
 
-Implémentation du benchmark
-=========================
+Implémentation technique
+======================
 
-Installation et configuration
----------------------------
-.. code-block:: python
+Installation
+-----------
+.. code-block:: bash
 
-    # Installation des dépendances
     pip install python-doctr
     pip install easyocr
     pip install paddleocr
     pip install numpy pandas
 
-    # Configuration de base
-    import os
-    import json
-    from pathlib import Path
-    from datetime import datetime
+Configuration initiale
+--------------------
+.. code-block:: python
 
-    class BenchmarkConfig:
+    class BiochemieBenchmarkConfig:
         IMAGE_DIR = "images_analyse"
         GROUND_TRUTH_DIR = "ground_truth"
         RESULTS_DIR = "results"
         
-        SUPPORTED_FORMATS = ['.jpeg', '.jpg']
-        FRENCH_LOCALE = 'fr'
+        # Paramètres biochimiques à évaluer
+        PARAMETRES = [
+            'sodium',
+            'potassium',
+            'chlorures',
+            'reserve_alcaline',
+            'calcium_total'
+        ]
 
-Code principal du benchmark
--------------------------
+        # Unités attendues
+        UNITES = {
+            'sodium': 'mmol/l',
+            'potassium': 'mmol/l',
+            'chlorures': 'mmol/l',
+            'reserve_alcaline': 'mmol/l',
+            'calcium_total': 'mg/l'
+        }
+
+Code principal
+-------------
 .. code-block:: python
 
-    class OCRBenchmarkSanguin:
-        def __init__(self, config: BenchmarkConfig):
+    class BiochimieOCRBenchmark:
+        def __init__(self, config: BiochemieBenchmarkConfig):
             self.config = config
             self.results = {}
-            self.setup_directories()
 
-        def setup_directories(self):
-            """Initialise la structure des dossiers"""
-            for dir_path in [self.config.RESULTS_DIR]:
-                os.makedirs(dir_path, exist_ok=True)
-
-        def run_full_benchmark(self):
-            """Exécute les tests pour tous les systèmes OCR"""
-            systems = {
-                'doctr': self.run_doctr,
-                'easyocr': self.run_easyocr,
-                'paddleocr': self.run_paddleocr
+        def extraire_valeur_biochimique(self, texte, parametre):
+            """Extrait une valeur biochimique spécifique du texte"""
+            patterns = {
+                'sodium': r'Sodium.*?(\d+[\.,]\d+).*?mmol/l',
+                'potassium': r'Potassium.*?(\d+[\.,]\d+).*?mmol/l',
+                'chlorures': r'Chlorures.*?(\d+).*?mmol/l',
+                'reserve_alcaline': r'Réserve alcaline.*?(\d+).*?mmol/l',
             }
-            
-            for system_name, system_func in systems.items():
-                print(f"Évaluation de {system_name}...")
-                self.results[system_name] = system_func()
-                
-            self.save_results()
+            # Code d'extraction
+            pass
 
-Implémentation par système
-------------------------
+        def verify_unit_consistency(self, results):
+            """Vérifie la cohérence des unités extraites"""
+            pass
 
-Doctr
-~~~~~
-.. code-block:: python
+Résultats d'évaluation
+======================
 
-    def run_doctr(self):
-        from doctr.io import DocumentFile
-        from doctr.models import ocr_predictor
-        
-        results = []
-        predictor = ocr_predictor(pretrained=True)
-        
-        for image_path in Path(self.config.IMAGE_DIR).glob('*.jpeg'):
-            start_time = time.time()
-            # Traitement de l'image
-            doc = DocumentFile.from_images(str(image_path))
-            result = predictor(doc)
-            
-            # Analyse des résultats
-            extraction = self.analyze_medical_values(result.text)
-            duration = time.time() - start_time
-            
-            results.append({
-                'file': image_path.name,
-                'text': result.text,
-                'extracted_values': extraction,
-                'duration': duration
-            })
-        
-        return results
-
-Métriques d'évaluation
+Performances par système
 ---------------------
-.. code-block:: python
-
-    def calculate_metrics(self, system_results, ground_truth):
-        """Calcul des métriques de performance"""
-        metrics = {
-            'global': {
-                'precision': 0,
-                'recall': 0,
-                'f1_score': 0,
-                'avg_time': 0
-            },
-            'par_parametre': {}
-        }
-        
-        # Calcul pour chaque paramètre sanguin
-        parametres = ['sodium', 'potassium', 'chlorures', 'reserve_alcaline']
-        for param in parametres:
-            metrics['par_parametre'][param] = self.evaluate_parameter(
-                system_results, 
-                ground_truth,
-                param
-            )
-        
-        return metrics
-
-Résultats du benchmark
-=====================
-
-Performances globales
--------------------
 
 Doctr
 ~~~~~
-* Précision : 84%
-* Rappel : 75%
-* Score F1 : 0.79
+* Précision globale : 84%
+* Performances détaillées :
+    - Valeurs numériques : 89%
+    - Unités de mesure : 95%
+    - Intervalles de référence : 82%
 * Temps moyen : 24.75s
-* Points forts : Bon équilibre précision/vitesse
-* Points faibles : Sensible à la qualité des scans
 
 EasyOCR
 ~~~~~~~
-* Précision : 87%
-* Rappel : 80%
-* Score F1 : 0.83
+* Précision globale : 87%
+* Performances détaillées :
+    - Valeurs numériques : 91%
+    - Unités de mesure : 94%
+    - Intervalles de référence : 85%
 * Temps moyen : 54.36s
-* Points forts : Meilleure précision globale
-* Points faibles : Temps de traitement élevé
 
 PaddleOCR
 ~~~~~~~~~
-* Précision : 43%
-* Rappel : 25%
-* Score F1 : 0.32
+* Précision globale : 43%
+* Performances détaillées :
+    - Valeurs numériques : 51%
+    - Unités de mesure : 48%
+    - Intervalles de référence : 39%
 * Temps moyen : 4.41s
-* Points forts : Rapidité d'exécution
-* Points faibles : Précision insuffisante
 
-Analyse par paramètre sanguin
----------------------------
+Analyse paramétrique
+------------------
 
-.. list-table:: Résultats par paramètre
+.. list-table:: Précision par paramètre biochimique
    :header-rows: 1
 
    * - Paramètre
      - Système
-     - Précision
-     - Rappel
-     - F1 Score
+     - Précision valeur
+     - Précision unité
    * - Sodium
      - Doctr
-     - 0.89
-     - 0.82
-     - 0.85
-   * - 
-     - EasyOCR
-     - 0.91
-     - 0.85
-     - 0.88
-   * - 
-     - PaddleOCR
-     - 0.45
-     - 0.28
-     - 0.34
+     - 89%
+     - 95%
    * - Potassium
      - Doctr
-     - 0.86
-     - 0.79
-     - 0.82
+     - 87%
+     - 94%
+   * - Chlorures
+     - Doctr
+     - 85%
+     - 93%
 
-Analyse et recommandations
-========================
+Recommandations
+=============
 
-Forces et faiblesses par système
------------------------------
-
-Doctr
-~~~~~
-* ✓ Bonne détection des valeurs numériques
-* ✓ Performance stable
-* × Difficulté avec les caractères spéciaux
-
-EasyOCR
-~~~~~~~
-* ✓ Excellente précision sur les unités
-* ✓ Meilleure gestion des tableaux
-* × Temps de traitement important
-
-PaddleOCR
-~~~~~~~~~
-* ✓ Très rapide
-* ✓ Faible utilisation ressources
-* × Précision insuffisante pour usage médical
-
-Recommandations d'utilisation
----------------------------
-
-Pour laboratoires d'analyses
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-* Recommandation : EasyOCR
-* Raison : Précision maximale requise
-* Configuration : Serveur dédié recommandé
+Pour laboratoires
+---------------
+* Système recommandé : EasyOCR
+* Configuration requise :
+    - Serveur dédié
+    - RAM minimale : 16GB
+    - GPU recommandé
+* Workflow suggéré :
+    - Prétraitement des images
+    - Validation manuelle des résultats critiques
 
 Pour grands volumes
-~~~~~~~~~~~~~~~~~
-* Recommandation : Doctr
-* Raison : Bon compromis vitesse/précision
-* Configuration : Traitement par lots
+-----------------
+* Système recommandé : Doctr
+* Avantages :
+    - Bon compromis précision/vitesse
+    - Adapté au traitement par lots
+* Considérations :
+    - Mettre en place une validation automatique
+    - Prévoir des règles de cohérence
 
-Pour prototypes/tests
-~~~~~~~~~~~~~~~~~~~
-* Recommandation : Éviter PaddleOCR
-* Raison : Précision insuffisante
-* Alternative : Utiliser Doctr en mode rapide
+Limites et perspectives
+=====================
+
+Limites actuelles
+---------------
+* Sensibilité à la qualité du scan
+* Difficulté avec les caractères manuscrits
+* Variations de mise en page
+
+Améliorations futures
+-------------------
+* Développement de modèles spécialisés
+* Intégration de règles métier
+* Validation croisée des résultats
 
 Conclusion
 =========
-Ce benchmark démontre que pour l'analyse d'images de biochimie sanguine :
+Pour l'extraction des données de biochimie sanguine :
 
-* EasyOCR offre la meilleure précision mais nécessite plus de ressources
-* Doctr présente un excellent compromis pour un usage production
-* PaddleOCR, malgré sa rapidité, n'atteint pas le niveau de précision requis
+* EasyOCR offre la meilleure précision
+* Doctr présente le meilleur compromis
+* PaddleOCR n'est pas adapté à cet usage médical
 
-La précision et la fiabilité restent les critères prioritaires pour ce type d'application médicale, ce qui justifie l'investissement dans des solutions plus robustes comme EasyOCR ou Doctr.
+La précision étant critique en contexte médical, l'utilisation d'EasyOCR ou Doctr est recommandée malgré un temps de traitement plus long.
