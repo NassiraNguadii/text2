@@ -1,7 +1,7 @@
 Bienvenue à Textra-Health's documentation!
 ====================================
 
-.. figure:: Documentation/Images/logo.png
+.. figure:: Documentation/Images/logo.jpeg
    :width: 80%
    :align: center
    :alt: Alternative text for the image
