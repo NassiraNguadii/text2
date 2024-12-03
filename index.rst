@@ -14,7 +14,7 @@ Bienvenue à Textra-Health's documentation!
    :caption: Table des matières:
 
    Documentation/Scripts/1_Project.rst
-   Documentation/Scripts/2_Project.rst
-
    Documentation/Scripts/2_Equipe.rst
+
+   Documentation/Scripts/3_Project.rst
    
