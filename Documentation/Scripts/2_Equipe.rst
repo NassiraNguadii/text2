@@ -20,9 +20,9 @@ Les membres :
 .. |linkedin_Nassira| image:: ../Images/LinkedIn_Logo.jpeg
     :width: 16
     :height: 16
-    :target: https://www.linkedin.com/in/mouad-ait-ayach-274aa6206/
+    :target: https://www.linkedin.com/in/nassira-nguadi-41b6a4275/
 
 .. |linkedin_ilyas| image:: ../Images/LinkedIn_Logo.jpeg
     :width: 16
     :height: 16
-    :target: https://www.linkedin.com/in/noureddine-saidi-42ba3a247/
+    :target: https://www.linkedin.com/in/ilyass-ouzzou-41512819a/
