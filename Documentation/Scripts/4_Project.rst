@@ -2,10 +2,6 @@
 Formation des Modèles d'Intelligence Artificielle
 ==================================================
 
-.. contents:: Table des Matières
-   :depth: 2
-   :local:
-
 Introduction
 ------------
 Cette documentation technique détaille les méthodologies d'entraînement des modèles d'intelligence artificielle, couvrant les aspects théoriques et pratiques des approches de formation depuis zéro et de fine-tuning.
