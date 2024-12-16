@@ -138,17 +138,64 @@ Pour le Fine-tuning de Modèle
 * Monitorer les performances sur différentes métriques
 * Maintenir un ensemble de validation robuste
 
-Conclusion
-=========
+Cas d'Étude : Analyse de Sang et Prédictions Médicales
+====================================================
 
-Le choix entre fine-tuning d'embeddings et fine-tuning de modèle dépend principalement 
-des ressources disponibles, de la complexité de la tâche et des objectifs de performance. 
-Le fine-tuning d'embeddings est préférable pour des solutions rapides et légères, tandis 
-que le fine-tuning de modèle est optimal pour des performances maximales sur des tâches 
-complexes.
+Description du Projet
+-------------------
 
-Indices et tableaux
-==================
+Notre projet vise à analyser des données d'analyses de sang pour :
 
-* :ref:`genindex`
-* :ref:`search`
+* Effectuer des prédictions sur les futures valeurs
+* Générer des recommandations personnalisées
+* Détecter les anomalies dans les résultats
+* Analyser les tendances temporelles des paramètres sanguins
+
+Choix de l'Approche
+------------------
+
+Pour ce projet, le **fine-tuning de modèle complet** a été sélectionné. Ce choix est justifié
+par plusieurs facteurs critiques :
+
+Complexité du Domaine
+^^^^^^^^^^^^^^^^^^^^
+
+* Relations complexes entre les multiples paramètres sanguins
+* Nécessité d'une compréhension approfondie du contexte médical
+* Variations des valeurs normales selon les caractéristiques du patient
+* Importance de la précision pour les décisions médicales
+
+Avantages Spécifiques
+^^^^^^^^^^^^^^^^^^^^
+
+* Meilleure détection des patterns complexes dans les données médicales
+* Capacité supérieure à générer des recommandations contextuelles
+* Prise en compte plus fine des cas particuliers et exceptions
+* Adaptabilité aux variations individuelles des patients
+
+Exigences de Précision
+^^^^^^^^^^^^^^^^^^^^^
+
+* Domaine médical nécessitant une haute précision
+* Risques importants liés aux erreurs de prédiction
+* Besoin de recommandations fiables et personnalisées
+* Nécessité d'une validation rigoureuse des résultats
+
+Considérations d'Implémentation
+-----------------------------
+
+Prérequis Techniques
+^^^^^^^^^^^^^^^^^^^
+
+* Volume de données important (>10,000 analyses de sang)
+* Infrastructure GPU puissante
+* Temps d'entraînement prolongé
+* Stockage conséquent pour les données et modèles
+
+Mesures de Validation
+^^^^^^^^^^^^^^^^^^^
+
+* Validation croisée rigoureuse
+* Vérification par des experts médicaux
+* Tests sur différents profils de patients
+* Monitoring continu des performances
