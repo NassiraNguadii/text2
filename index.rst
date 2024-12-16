@@ -18,6 +18,9 @@ Bienvenue à Textra-Health's documentation!
    Documentation/Scripts/3_Project.rst
    Documentation/Scripts/4_Project.rst
    Documentation/Scripts/5_Project.rst
+   Documentation/Scripts/6_Project.rst
+   
+   
    
    
          
