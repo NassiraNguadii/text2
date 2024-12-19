@@ -2,10 +2,6 @@
 Guide Complet : Quantification et QLoRA
 ==============================================
 
-.. contents:: Table des matières
-   :depth: 2
-   :local:
-
 1. Qu'est-ce que la Quantification ?
 ==============================================
 
