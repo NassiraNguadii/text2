@@ -1,21 +1,19 @@
 #########################################
-Fine-tuning Starling-LM pour Analyses Médicales
+Benchmark des Modèles pour Analyses Médicales
 #########################################
+
 Introduction
 ===========
 
-Ce document détaille l'implémentation du fine-tuning de Starling-LM pour l'analyse 
-d'examens sanguins, basé sur les benchmarks du Medical-LLM Leaderboard.
+Analyse comparative des modèles de langage pour les examens sanguins selon le Medical-LLM Leaderboard.
 
-Sélection du Modèle
+Évaluation des Modèles
 ==================
 
-Analyse Comparative
+Performances Comparées
 -----------------
 
-Selon le Medical-LLM Leaderboard, les performances des modèles sont :
-
-.. list-table:: Comparaison des Performances
+.. list-table:: Scores des Modèles
    :header-rows: 1
    :widths: 20 20 20 20
 
@@ -36,28 +34,26 @@ Selon le Medical-LLM Leaderboard, les performances des modèles sont :
      - 62.5%
      - 67.5%
 
-Choix de Starling-LM
+Choix Final : Mistral-7B
 ------------------
 
-Avantages Clés
+Avantages
 ^^^^^^^^^^^^^
 
-1. **Performance Supérieure**
-   
-   * Scores élevés en connaissance clinique (~70%)
-   * Excellente compréhension médicale
-   * Base solide pour analyses biologiques
+1. **Optimisation Ressources**
+   * Mémoire réduite
+   * Inférence rapide
+   * Déploiement flexible
 
-2. **Spécialisation Médicale**
-   
-   * Pré-entraîné sur données médicales
-   * Optimisé pour contexte clinique
-   * Vocabulaire médical intégré
+2. **Performance/Coût**
+   * Scores stables (~65%)
+   * Maintenance simplifiée
+   * Fine-tuning efficace
 
-Architecture Technique
+Spécifications Techniques
 ====================
 
-Prérequis
+Configuration Minimale
 ---------
 
 .. code-block:: text
@@ -66,14 +62,12 @@ Prérequis
    - RAM: 32GB+
    - Stockage: 100GB+
    - Python: 3.8+
-   - Framework: PyTorch
+   - PyTorch
 
-Configuration d'Entraînement
+Paramètres d'Entraînement
 --------------------------
 
 .. code-block:: python
-
-   from transformers import TrainingArguments, Trainer
 
    training_args = TrainingArguments(
        output_dir="./results",
@@ -88,120 +82,87 @@ Configuration d'Entraînement
 Pipeline de Données
 ================
 
-Préparation
+Structure
 ----------
 
-1. Collection des Données
-^^^^^^^^^^^^^^^^^^^^^^^^
-
-* Minimum 10,000 analyses sanguines
-* Anonymisation requise
-* Structure standardisée
-
-2. Nettoyage
-^^^^^^^^^^^
-
-* Normalisation des paramètres
-* Gestion des valeurs manquantes
-* Validation des plages
-
-3. Split des Données
-^^^^^^^^^^^^^^^^^
-
-.. list-table:: Répartition des Données
+.. list-table:: Distribution Données
    :header-rows: 1
    :widths: 30 30 40
 
    * - Set
-     - Pourcentage
-     - Utilisation
+     - Ratio
+     - Usage
    * - Entraînement
      - 70%
-     - Fine-tuning principal
+     - Fine-tuning
    * - Validation
      - 15%
-     - Ajustement hyperparamètres
+     - Hyperparamètres
    * - Test
      - 15%
-     - Évaluation finale
+     - Évaluation
 
-Processus de Fine-tuning
-=======================
+Implémentation
+==============
 
-Étapes d'Implémentation
+Installation
 ---------------------
 
-1. **Installation**
+.. code-block:: bash
 
-   .. code-block:: bash
+   pip install transformers accelerate torch
 
-      pip install transformers
-      pip install accelerate
-      pip install torch
+Chargement
+---------------------
 
-2. **Chargement du Modèle**
+.. code-block:: python
 
-   .. code-block:: python
+   from transformers import AutoModelForCausalLM, AutoTokenizer
 
-      from transformers import AutoModelForCausalLM, AutoTokenizer
+   model = AutoModelForCausalLM.from_pretrained("mistralai/Mistral-7B-v0.1")
+   tokenizer = AutoTokenizer.from_pretrained("mistralai/Mistral-7B-v0.1")
 
-      model_name = "berkeley-nest/Starling-LM-7B-alpha"
-      model = AutoModelForCausalLM.from_pretrained(model_name)
-      tokenizer = AutoTokenizer.from_pretrained(model_name)
-
-Validation et Métriques
+Métriques Cibles
 =====================
 
-Protocole de Validation
----------------------
-
-* Validation croisée 5-fold
-* Tests sur cas réels
-* Validation par experts médicaux
-
-Métriques de Performance
-----------------------
-
-.. list-table:: Objectifs de Performance
+.. list-table:: Objectifs
    :header-rows: 1
    :widths: 40 30 30
 
    * - Métrique
-     - Objectif
+     - Cible
      - Priorité
-   * - Précision globale
+   * - Précision
      - >85%
      - Haute
    * - Rappel anomalies
      - >90%
      - Critique
-   * - Temps réponse
+   * - Latence
      - <2s
      - Moyenne
 
 Maintenance
 ==========
 
-Plan de Suivi
+Suivi
 ------------
 
-1. **Monitoring Continu**
-   
-   * Performance temps réel
-   * Logs d'erreurs
-   * Métriques d'utilisation
+1. **Monitoring**
+   * Performance
+   * Erreurs
+   * Utilisation
 
-2. **Mises à Jour**
-   
-   * Réentraînement mensuel
-   * Validation des performances
-   * Ajustements incrémentaux
+2. **Updates**
+   * Mensuel
+   * Validation
+   * Ajustements
 
 Références
 =========
 
-.. [1] Berkeley-NEST. (2024). Starling-LM-7B-alpha. Hugging Face.
-       https://huggingface.co/berkeley-nest/Starling-LM-7B-alpha
+.. [1] Mistral AI. (2024). Mistral-7B. 
+       https://huggingface.co/mistralai/Mistral-7B-v0.1
 
-.. [2] Open Medical. (2024). The Open Medical-LLM Leaderboard.
+.. [2] Open Medical. (2024). Medical-LLM Leaderboard.
        https://huggingface.co/spaces/open-medical/medical-llm-leaderboard
