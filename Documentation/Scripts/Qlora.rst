@@ -1,86 +1,36 @@
-=============================================================
-.. raw:: html
+.. role:: red
+   :class: red
 
-   <style>
-   /* Styles de base */
-   h1, h2 { 
-     color: #333333;
-     font-family: 'Roboto', sans-serif;
-   }
-   /* Styles des sections */
-   .section-title { 
-     color: #2196F3;
-     font-weight: bold;
-     font-size: 1.5em;
-   }
-   .subsection-title {
-     color: #1976D2;
-     font-weight: bold;
-     font-size: 1.3em;
-   }
-   .objectives-title {
-     color: #4CAF50;
-     font-weight: bold;
-     font-size: 1.4em;
-   }
-   /* Textes colorés */
-   .red { color: #F44336; }
-   .green { color: #4CAF50; }
-   .blue { color: #2196F3; }
-   .orange { color: #FF9800; }
-   .purple { color: #9C27B0; }
-   /* Code et exemples */
-   .code-block {
-     background-color: #f5f5f5;
-     padding: 1em;
-     border-radius: 4px;
-   }
-   /* Liens */
-   .link-blue {
-     color: #2196F3;
-     text-decoration: underline;
-   }
-   </style>
+.. role:: green
+   :class: green
 
-.. raw:: html
+.. role:: blue
+   :class: blue
 
-   <h1>Guide Complet : QLoRA et Quantification des Modèles d'IA</h1>
+.. role:: orange
+   :class: orange
 
-.. raw:: html
+.. role:: purple
+   :class: purple
 
-   <div class="objectives-title">Objectifs et Vue d'Ensemble</div>
+Guide Complet : QLoRA et Quantification des Modèles d'IA
+======================================================
 
-Le fine-tuning des embeddings constitue une étape cruciale dans l'optimisation des applications RAG (Retrieval-Augmented Generation). Notre processus utilise le modèle |link-blue| comme base et exploite une architecture Matryoshka innovante pour générer des embeddings de différentes dimensions.
+Objectifs et Vue d'Ensemble
+--------------------------
 
-.. |link-blue| raw:: html
+Le fine-tuning des embeddings constitue une étape cruciale dans l'optimisation des applications RAG (Retrieval-Augmented Generation). Notre processus utilise le modèle :blue:`multilingual-e5-large` comme base et exploite une architecture Matryoshka innovante pour générer des embeddings de différentes dimensions.
 
-   <span class="link-blue">multilingual-e5-large</span>
+Configuration Technique
+---------------------
 
-.. raw:: html
+Environnement Requis
+~~~~~~~~~~~~~~~~~~~
 
-   <div class="section-title">Configuration Technique</div>
+L'infrastructure nécessaire comprend un :blue:`GPU` avec support CUDA, un minimum de :green:`16GB` de RAM, ainsi qu'une installation de :blue:`Python 3.8` ou supérieur.
 
-.. raw:: html
-
-   <div class="subsection-title">Environnement Requis</div>
-
-L'infrastructure nécessaire comprend un |blue-gpu| avec support CUDA, un minimum de |green-ram| de RAM, ainsi qu'une installation de |blue-python| ou supérieur.
-
-.. |blue-gpu| raw:: html
-
-   <span class="blue">GPU</span>
-
-.. |green-ram| raw:: html
-
-   <span class="green">16GB</span>
-
-.. |blue-python| raw:: html
-
-   <span class="blue">Python 3.8</span>
-
-.. raw:: html
-
-   <div class="subsection-title">Bibliothèques Essentielles</div>
+Bibliothèques Essentielles
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
@@ -96,63 +46,28 @@ L'infrastructure nécessaire comprend un |blue-gpu| avec support CUDA, un minimu
    )
    from transformers import AutoModel, AutoTokenizer
 
-.. raw:: html
-
-   <div class="section-title">Processus de Fine-tuning</div>
+Processus de Fine-tuning
+-----------------------
 
 Le processus de fine-tuning se déroule en plusieurs étapes clés :
 
-1. |blue-preparation| des données médicales
-2. |green-config| du modèle et des hyperparamètres
-3. |orange-training| avec les pertes adaptées
-4. |purple-eval| des performances
+1. :blue:`Préparation` des données médicales
+2. :green:`Configuration` du modèle et des hyperparamètres
+3. :orange:`Entraînement` avec les pertes adaptées
+4. :purple:`Évaluation` des performances
 
-.. |blue-preparation| raw:: html
+Architecture Matryoshka
+----------------------
 
-   <span class="blue">Préparation</span>
-
-.. |green-config| raw:: html
-
-   <span class="green">Configuration</span>
-
-.. |orange-training| raw:: html
-
-   <span class="orange">Entraînement</span>
-
-.. |purple-eval| raw:: html
-
-   <span class="purple">Évaluation</span>
-
-.. raw:: html
-
-   <div class="section-title">Architecture Matryoshka</div>
-
-L'architecture |green-matryoshka| permet de générer des embeddings imbriqués de différentes dimensions, offrant une flexibilité accrue pour différents cas d'usage.
-
-.. |green-matryoshka| raw:: html
-
-   <span class="green">Matryoshka</span>
+L'architecture :green:`Matryoshka` permet de générer des embeddings imbriqués de différentes dimensions, offrant une flexibilité accrue pour différents cas d'usage.
 
 Caractéristiques principales :
-- Dimensions : |blue-dims|
-- Performances : |green-perf|
-- Adaptabilité : |orange-adapt|
+- Dimensions : :blue:`384, 512, et 768 dimensions`
+- Performances : :green:`Haute précision à chaque niveau`
+- Adaptabilité : :orange:`Adaptation dynamique selon les besoins`
 
-.. |blue-dims| raw:: html
-
-   <span class="blue">384, 512, et 768 dimensions</span>
-
-.. |green-perf| raw:: html
-
-   <span class="green">Haute précision à chaque niveau</span>
-
-.. |orange-adapt| raw:: html
-
-   <span class="orange">Adaptation dynamique selon les besoins</span>
-
-.. raw:: html
-
-   <div class="section-title">Exemples de Code</div>
+Exemples de Code
+---------------
 
 Configuration du modèle :
 
@@ -171,30 +86,16 @@ Configuration du modèle :
    # Initialisation de la perte
    loss = MultipleNegativesRankingLoss(model)
 
-.. raw:: html
-
-   <div class="section-title">Résultats et Métriques</div>
+Résultats et Métriques
+----------------------
 
 Nos expérimentations montrent des améliorations significatives :
 
-- Précision : |green-precision|
-- Rappel : |blue-recall|
-- F1-Score : |orange-f1|
+- Précision : :green:`+15% en précision`
+- Rappel : :blue:`+12% en rappel`
+- F1-Score : :orange:`+13.5% en F1-Score`
 
-.. |green-precision| raw:: html
-
-   <span class="green">+15% en précision</span>
-
-.. |blue-recall| raw:: html
-
-   <span class="blue">+12% en rappel</span>
-
-.. |orange-f1| raw:: html
-
-   <span class="orange">+13.5% en F1-Score</span>
-
-.. raw:: html
-
-   <div class="section-title">Conclusion</div>
+Conclusion
+---------
 
 Cette approche de fine-tuning des embeddings, combinée à l'architecture Matryoshka, offre une solution robuste et flexible pour l'analyse médicale, avec des performances améliorées sur l'ensemble des métriques évaluées.
