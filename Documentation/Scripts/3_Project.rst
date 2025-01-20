@@ -1,232 +1,131 @@
-************************************************
-Benchmark OCR pour Biochimie Sanguine
-************************************************
+.. role:: red
+   :class: red
+
+.. role:: green
+   :class: green
+
+.. role:: blue
+   :class: blue
+
+.. role:: orange
+   :class: orange
+
+.. raw:: html
+
+   <style>
+   .red {color: red;}
+   .green {color: green;}
+   .blue {color: blue;}
+   .orange {color: orange;}
+   </style>
+
+Benchmark OCR d'Analyses Sanguines
+================================
 
 Introduction
-===========
-
-Contexte médical
---------------
-La biochimie sanguine est une analyse médicale spécifique qui évalue les concentrations de différentes substances chimiques dans le sang. Elle comprend notamment :
-
-* Les électrolytes (sodium, potassium, chlorures)
-* Les protéines
-* Les enzymes
-* La réserve alcaline
-* D'autres paramètres biochimiques
-
-Ces analyses sont essentielles pour :
-
-* Évaluer la fonction des organes
-* Suivre l'équilibre électrolytique
-* Détecter des anomalies métaboliques
-* Ajuster les traitements médicaux
-
-Objectif du benchmark
--------------------
-Ce benchmark vise à évaluer la capacité de trois systèmes OCR à extraire précisément les données des documents de biochimie sanguine :
-
-* Doctr
-* EasyOCR
-* PaddleOCR
-
-Spécificités du benchmark
-========================
-
-Données évaluées
---------------
-* Nombre de documents : 20 rapports de biochimie sanguine
-* Format : Images JPEG
-* Types de données analysées :
-    - Valeurs numériques des paramètres biochimiques
-    - Unités de mesure (mmol/l, g/l)
-    - Intervalles de référence
-    - Dates des analyses
-
-Structure du projet
------------------
-::
-
-    benchmark_biochimie/
-    ├── ground_truth/          # Documents de référence
-    │   ├── 1.txt             # Texte exact de chaque analyse
-    │   └── ...
-    ├── images_analyse/        # Images à analyser
-    │   ├── 1.jpeg            # Scan d'analyse biochimique
-    │   └── ...
-    ├── results/              # Résultats par système
-    │   ├── doctr/
-    │   ├── easyocr/
-    │   └── paddleocr/
-    └── src/                  # Code source
-        ├── benchmark.py      # Script principal
-        ├── utils.py         # Fonctions utilitaires
-        └── metrics.py       # Calcul des métriques
-
-Implémentation technique
-======================
-
-Installation
 -----------
-.. code-block:: bash
 
-    pip install python-doctr
-    pip install easyocr
-    pip install paddleocr
-    pip install numpy pandas
+Dans le domaine médical, l'exactitude des données est primordiale. C'est dans cette optique que nous avons réalisé un benchmark approfondi de trois systèmes OCR sur nos analyses sanguines. Notre objectif était simple : déterminer quel système de reconnaissance de caractères offre la meilleure fiabilité pour la numérisation des résultats d'analyses médicales.
 
-Configuration initiale
+Notebook Jupyter associé : `Voir le notebook complet <https://github.com/NassiraNguadii/text2/blob/main/Documentation/notebooks/benchmark__ocripynb.ipynb>`_
+
+Architecture du Benchmark
+------------------------
+
+.. image:: image4
+   :alt: Structure des fichiers
+
+Le benchmark repose sur une architecture binaire : un dossier 'ground_truth' contenant nos textes de référence, et un dossier 'images_analyse' regroupant nos scans à traiter. Cette approche nous permet de comparer directement les résultats OCR avec les données originales de nos 20 analyses sanguines.
+
+Résultats de notre étude
+------------------------
+
+:blue:`Doctr : L'équilibriste`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. image:: image1
+   :alt: Résultats Doctr
+
+Doctr se révèle être le système le plus équilibré de notre benchmark. Sur nos 20 analyses sanguines, il atteint une :green:`précision de 84%` et un temps de traitement de :blue:`24,75 secondes` par document. Son F1 Score de :green:`0,79` confirme sa constance dans le traitement de nos documents médicaux.
+
+.. code-block:: python
+    :emphasize-lines: 1,2
+
+    from doctr.io import DocumentFile
+    from doctr.models import ocr_predictor
+
+    model = ocr_predictor(pretrained=True)
+    for i in range(1, 21):  # Pour nos 20 analyses
+        image_path = f"images_analyse/{i}.jpg"
+        doc = DocumentFile.from_images(image_path)
+        result = model(doc)
+
+:green:`EasyOCR : Le champion de la précision`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. image:: image2
+   :alt: Résultats EasyOCR
+
+EasyOCR excelle sur nos analyses sanguines avec :green:`87% de précision` et un F1 Score de :green:`0,83`. Son temps de traitement de :orange:`54,36 secondes` par document est plus long, mais sa précision sur nos paramètres biologiques est remarquable.
+
+.. code-block:: python
+    :emphasize-lines: 1
+
+    import easyocr
+    import os
+
+    reader = easyocr.Reader(['fr'])
+    image_dir = 'images_analyse'
+    for img in sorted(os.listdir(image_dir)):
+        result = reader.readtext(os.path.join(image_dir, img))
+
+:red:`PaddleOCR : La rapidité au détriment de la précision`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. image:: image3
+   :alt: Résultats PaddleOCR
+
+Sur nos analyses sanguines, PaddleOCR se montre décevant avec une :red:`précision de seulement 43%` et un F1 Score de :red:`0,32`, malgré sa rapidité de :green:`4,41 secondes` par document.
+
+.. code-block:: python
+    :emphasize-lines: 1
+
+    from paddleocr import PaddleOCR
+    import glob
+
+    ocr = PaddleOCR(use_angle_cls=True, lang='fr')
+    for img_path in glob.glob('images_analyse/*.jpg'):
+        result = ocr.ocr(img_path)
+
+Implications pratiques
 --------------------
-.. code-block:: python
 
-    class BiochemieBenchmarkConfig:
-        IMAGE_DIR = "images_analyse"
-        GROUND_TRUTH_DIR = "ground_truth"
-        RESULTS_DIR = "results"
-        
-        # Paramètres biochimiques à évaluer
-        PARAMETRES = [
-            'sodium',
-            'potassium',
-            'chlorures',
-            'reserve_alcaline',
-            'calcium_total'
-        ]
+Nos résultats sur ces 20 analyses sanguines orientent clairement les choix technologiques :
 
-        # Unités attendues
-        UNITES = {
-            'sodium': 'mmol/l',
-            'potassium': 'mmol/l',
-            'chlorures': 'mmol/l',
-            'reserve_alcaline': 'mmol/l',
-            'calcium_total': 'mg/l'
-        }
+- Dans nos petites structures médicales, :green:`EasyOCR` représente une solution fiable. Sa précision supérieure sur nos paramètres biologiques compense largement son temps de traitement plus long.
 
-Code principal
--------------
-.. code-block:: python
+- Nos grands centres médicaux trouvent en :blue:`Doctr` un allié précieux. Sa combinaison de vitesse et de précision permet de traiter efficacement de grands volumes d'analyses tout en maintenant un niveau de fiabilité acceptable.
 
-    class BiochimieOCRBenchmark:
-        def __init__(self, config: BiochemieBenchmarkConfig):
-            self.config = config
-            self.results = {}
+- Quant à :red:`PaddleOCR`, nos tests montrent qu'il n'est pas adapté aux analyses sanguines, le risque d'erreur étant trop élevé.
 
-        def extraire_valeur_biochimique(self, texte, parametre):
-            """Extrait une valeur biochimique spécifique du texte"""
-            patterns = {
-                'sodium': r'Sodium.*?(\d+[\.,]\d+).*?mmol/l',
-                'potassium': r'Potassium.*?(\d+[\.,]\d+).*?mmol/l',
-                'chlorures': r'Chlorures.*?(\d+).*?mmol/l',
-                'reserve_alcaline': r'Réserve alcaline.*?(\d+).*?mmol/l',
-            }
-            # Code d'extraction
-            pass
+Configuration matérielle
+----------------------
 
-        def verify_unit_consistency(self, results):
-            """Vérifie la cohérence des unités extraites"""
-            pass
+Pour nos tests, nous avons utilisé une configuration robuste qui s'est révélée nécessaire pour des performances optimales :
 
-Résultats d'évaluation
-======================
+- RAM : :blue:`16 GB minimum`
+- GPU : :blue:`Carte graphique dédiée requise`
+- OS : Linux/Windows/MacOS
 
-Performances par système
----------------------
-
-Doctr
-~~~~~
-* Précision globale : 84%
-* Performances détaillées :
-    - Valeurs numériques : 89%
-    - Unités de mesure : 95%
-    - Intervalles de référence : 82%
-* Temps moyen : 24.75s
-
-EasyOCR
-~~~~~~~
-* Précision globale : 87%
-* Performances détaillées :
-    - Valeurs numériques : 91%
-    - Unités de mesure : 94%
-    - Intervalles de référence : 85%
-* Temps moyen : 54.36s
-
-PaddleOCR
-~~~~~~~~~
-* Précision globale : 43%
-* Performances détaillées :
-    - Valeurs numériques : 51%
-    - Unités de mesure : 48%
-    - Intervalles de référence : 39%
-* Temps moyen : 4.41s
-
-Analyse paramétrique
-------------------
-
-.. list-table:: Précision par paramètre biochimique
-   :header-rows: 1
-
-   * - Paramètre
-     - Système
-     - Précision valeur
-     - Précision unité
-   * - Sodium
-     - Doctr
-     - 89%
-     - 95%
-   * - Potassium
-     - Doctr
-     - 87%
-     - 94%
-   * - Chlorures
-     - Doctr
-     - 85%
-     - 93%
-
-Recommandations
-=============
-
-Pour laboratoires
+Notre choix final
 ---------------
-* Système recommandé : EasyOCR
-* Configuration requise :
-    - Serveur dédié
-    - RAM minimale : 16GB
-    - GPU recommandé
-* Workflow suggéré :
-    - Prétraitement des images
-    - Validation manuelle des résultats critiques
 
-Pour grands volumes
------------------
-* Système recommandé : Doctr
-* Avantages :
-    - Bon compromis précision/vitesse
-    - Adapté au traitement par lots
-* Considérations :
-    - Mettre en place une validation automatique
-    - Prévoir des règles de cohérence
+Après l'analyse approfondie de nos 20 documents d'analyses sanguines, :blue:`Doctr` s'impose comme le meilleur choix global. Cette décision s'appuie sur plusieurs facteurs clés :
 
-Limites et perspectives
-=====================
+- :green:`Précision` : 84% (proche des 87% d'EasyOCR)
+- :blue:`Temps de traitement` : 24,75 secondes (deux fois plus rapide qu'EasyOCR)
+- :green:`F1 Score` : 0,79 (fiabilité constante)
 
-Limites actuelles
----------------
-* Sensibilité à la qualité du scan
-* Difficulté avec les caractères manuscrits
-* Variations de mise en page
+En contexte réel d'analyses sanguines, cette combinaison de vitesse et de précision fait toute la différence. Le gain de temps significatif permet aux laboratoires de traiter plus d'analyses, tout en maintenant un niveau de précision largement suffisant pour un usage médical. La différence de précision de 3% avec EasyOCR est minime comparée au gain en efficacité opérationnelle.
 
-Améliorations futures
--------------------
-* Développement de modèles spécialisés
-* Intégration de règles métier
-* Validation croisée des résultats
-
-Conclusion
-=========
-Pour l'extraction des données de biochimie sanguine :
-
-* EasyOCR offre la meilleure précision
-* Doctr présente le meilleur compromis
-* PaddleOCR n'est pas adapté à cet usage médical
-
-La précision étant critique en contexte médical, l'utilisation d'EasyOCR ou Doctr est recommandée malgré un temps de traitement plus long.
+Notre recommandation finale est donc claire : nous avons adopté :blue:`Doctr` pour la numérisation de nos analyses sanguines. Il représente le meilleur compromis entre précision et performance, permettant une numérisation efficace et fiable de nos données médicales. Pour nos laboratoires ayant des contraintes de temps strictes, Doctr est clairement la solution optimale pour le traitement de nos analyses sanguines.
