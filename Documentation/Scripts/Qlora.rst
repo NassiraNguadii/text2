@@ -1,6 +1,6 @@
-==================================================
+=================================================
 Guide Complet et Coloré : QLoRA et Quantification
-==================================================
+=================================================
 
 .. role:: red
 .. role:: green
@@ -10,10 +10,6 @@ Guide Complet et Coloré : QLoRA et Quantification
 .. role:: yellow
 .. role:: gray
 .. role:: pink
-
-.. contents:: Table des Matières
-   :depth: 4
-   :backlinks: none
 
 .. raw:: html
 
@@ -31,17 +27,16 @@ Préface
 .. attention:: 
     Ce guide complet couvre les aspects théoriques et pratiques de la :blue:`quantification` et de :orange:`QLoRA`, des technologies révolutionnaires dans le domaine de l'IA.
 
-1. Fondamentaux de la Quantification
-==================================
+Fondamentaux de la Quantification
+--------------------------------
 
-1.1 Concept et Théorie
----------------------
+Concept et Théorie
+^^^^^^^^^^^^^^^^^
 
 .. tip::
     La :green:`quantification` est comme une traduction des nombres : on passe d'un langage très précis (nombres à virgule flottante) à un langage plus simple (nombres entiers ou formats réduits).
 
-Principes de Base
-^^^^^^^^^^^^^^^^
+**Principes de Base**
 
 .. note:: 
     Imaginez la quantification comme un appareil photo :
@@ -50,11 +45,10 @@ Principes de Base
     * :orange:`Résolution moyenne` → INT8 (8 bits)
     * :red:`Basse résolution` → INT4 (4 bits)
 
-1.2 Types de Quantification
--------------------------
+Types de Quantification
+^^^^^^^^^^^^^^^^^^^^^^
 
-Post-entraînement
-^^^^^^^^^^^^^^^
+**Post-entraînement**
 
 .. code-block:: python
     :caption: Exemple de Quantification Post-entraînement
@@ -74,8 +68,7 @@ Post-entraînement
             dtype=torch.qint8
         )
 
-Quantification pendant l'Entraînement
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+**Quantification pendant l'Entraînement**
 
 .. important::
     La quantification pendant l'entraînement offre trois avantages majeurs :
@@ -84,11 +77,11 @@ Quantification pendant l'Entraînement
     2. :blue:`Meilleure précision`
     3. :orange:`Optimisation continue`
 
-2. Architecture QLoRA Avancée
-===========================
-
-2.1 Composants Fondamentaux
+Architecture QLoRA Avancée
 -------------------------
+
+Composants Fondamentaux
+^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block::
 
@@ -121,7 +114,7 @@ Quantification pendant l'Entraînement
     :purple:`Architecture Détaillée de QLoRA`
 
 NormalFloat 4-bit Enrichi
-^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: rst
     :caption: Structure Détaillée NormalFloat
@@ -135,7 +128,7 @@ NormalFloat 4-bit Enrichi
     +------------------+----------------------+
 
 Distribution des Valeurs
-^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^
 
 .. math::
 
@@ -144,11 +137,11 @@ Distribution des Valeurs
     \text{:orange:`Logarithmique`} & \text{pour les grandes valeurs}
     \end{cases}
 
-2.2 Processus d'Optimisation
---------------------------
+Processus d'Optimisation
+-----------------------
 
 Double Quantification Avancée
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. list-table:: Niveaux de Quantification
    :header-rows: 1
@@ -172,14 +165,13 @@ Double Quantification Avancée
      - Moyenne
      - 8x
 
-3. Implémentation Technique
-=========================
+Implémentation Technique
+-----------------------
 
-3.1 Configuration Système
-----------------------
+Configuration Système
+^^^^^^^^^^^^^^^^^^
 
-Prérequis Matériels
-^^^^^^^^^^^^^^^^^
+**Prérequis Matériels**
 
 .. warning::
     Configuration recommandée :
@@ -203,11 +195,10 @@ Prérequis Matériels
             'name': gpu_info.name
         }
 
-3.2 Pipeline d'Entraînement
--------------------------
+Pipeline d'Entraînement
+^^^^^^^^^^^^^^^^^^^^^
 
-Phases Principales
-^^^^^^^^^^^^^^^^
+**Phases Principales**
 
 .. code-block::
     :caption: Flux d'Entraînement QLoRA
@@ -226,14 +217,13 @@ Phases Principales
 
     :blue:`Flux d'entraînement complet de QLoRA`
 
-4. Optimisations Avancées
-========================
+Optimisations Avancées
+---------------------
 
-4.1 Techniques d'Optimisation Mémoire
-----------------------------------
+Techniques d'Optimisation Mémoire
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Stratégies Avancées
-^^^^^^^^^^^^^^^^^
+**Stratégies Avancées**
 
 .. note::
     Trois approches principales :
@@ -250,8 +240,8 @@ Stratégies Avancées
         * Multiple niveaux de cache
         * Prédiction des accès
 
-4.2 Métriques de Performance
--------------------------
+Métriques de Performance
+^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
     :caption: Monitoring des Performances
@@ -280,8 +270,7 @@ Stratégies Avancées
             "vitesse_inference": resultats.inference_time
         }
 
-Indicateurs Clés
-^^^^^^^^^^^^^^
+**Indicateurs Clés**
 
 .. list-table:: KPIs de Performance
    :header-rows: 1
@@ -297,14 +286,13 @@ Indicateurs Clés
    * - Précision
      - :yellow:`98% de l'original`
 
-5. Applications Pratiques
-=======================
+Applications Pratiques
+--------------------
 
-5.1 Cas d'Usage Industriels
--------------------------
+Cas d'Usage Industriels
+^^^^^^^^^^^^^^^^^^^^
 
-Solutions Déployées
-^^^^^^^^^^^^^^^^^
+**Solutions Déployées**
 
 .. tip::
     Applications réelles :
@@ -321,11 +309,10 @@ Solutions Déployées
         - IoT intelligent
         - Dispositifs mobiles
 
-5.2 Bonnes Pratiques Détaillées
------------------------------
+Bonnes Pratiques Détaillées
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Recommandations Expert
-^^^^^^^^^^^^^^^^^^^
+**Recommandations Expert**
 
 .. important::
     Pour une implémentation réussie :
@@ -358,7 +345,7 @@ Annexes
 -------
 
 Glossaire Technique
-^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^
 
 .. glossary::
 
@@ -375,7 +362,7 @@ Glossaire Technique
       :purple:`Ajustement fin` des paramètres du modèle
 
 Références et Resources
-^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^
 
 .. [1] Tim Dettmers et al. (2023) ":blue:`QLoRA: Efficient Finetuning of Quantized LLMs`"
 .. [2] Documentation PyTorch sur la :green:`quantification`
