@@ -17,7 +17,7 @@ Bienvenue à Textra-Health's documentation!
    Documentation/Scripts/1_Project.rst
    Documentation/Scripts/OCR.rst
    Documentation/Scripts/Dataset.rst
-   Documentation/Scripts/5_Project.rst
+   Documentation/Scripts/embedding.rst
    Documentation/Scripts/6_Project.rst
    Documentation/Scripts/7_Project.rst
    Documentation/Scripts/8_Project.rst
