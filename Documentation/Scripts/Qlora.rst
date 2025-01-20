@@ -10,92 +10,126 @@
 .. role:: orange
    :class: orange
 
-.. role:: purple
-   :class: purple
+QLoRA : Guide d'Implémentation
+=============================
 
-Guide Complet : QLoRA et Quantification des Modèles d'IA
-======================================================
+Introduction
+-----------
 
-Objectifs et Vue d'Ensemble
---------------------------
+QLoRA (Quantized Low-Rank Adaptation) est une technique permettant le fine-tuning efficace de grands modèles de langage (LLMs) avec une empreinte mémoire réduite. Cette approche combine la quantification 4-bits avec l'adaptation de rang faible pour permettre un fine-tuning de haute qualité sur des ressources limitées.
 
-Le fine-tuning des embeddings constitue une étape cruciale dans l'optimisation des applications RAG (Retrieval-Augmented Generation). Notre processus utilise le modèle :blue:`multilingual-e5-large` comme base et exploite une architecture Matryoshka innovante pour générer des embeddings de différentes dimensions.
+Principes Fondamentaux
+--------------------
 
-Configuration Technique
+1. :blue:`Quantification 4-bits`
+   - Réduction de la précision du modèle de base à 4-bits
+   - Utilisation de la quantification NormalFloat (NF4)
+   - Conservation des poids originaux en mémoire CPU
+
+2. :green:`Adaptateurs Low-Rank`
+   - Ajout de petites matrices d'adaptation entraînables
+   - Matrices maintenues en précision FP16
+   - Réduction significative des paramètres à entraîner
+
+Configuration Requise
+-------------------
+
+Matériel Minimum :
+- :blue:`GPU` : 16GB VRAM
+- RAM : :green:`32GB`
+- Stockage : :orange:`100GB` disponibles
+
+Dépendances Logicielles
 ---------------------
 
-Environnement Requis
-~~~~~~~~~~~~~~~~~~~
+.. code-block:: python
 
-L'infrastructure nécessaire comprend un :blue:`GPU` avec support CUDA, un minimum de :green:`16GB` de RAM, ainsi qu'une installation de :blue:`Python 3.8` ou supérieur.
+   # Installation des dépendances
+   pip install bitsandbytes>=0.39.0
+   pip install transformers>=4.30.0
+   pip install peft>=0.4.0
+   pip install accelerate>=0.20.0
+   pip install trl>=0.4.7
 
-Bibliothèques Essentielles
-~~~~~~~~~~~~~~~~~~~~~~~~~
+Implémentation
+-------------
+
+1. Configuration du Modèle :
 
 .. code-block:: python
 
-   import torch
-   from sentence_transformers import SentenceTransformer
-   from sentence_transformers.evaluation import (
-       InformationRetrievalEvaluator,
-       SequentialEvaluator
+   from transformers import AutoModelForCausalLM, AutoTokenizer
+   from peft import prepare_model_for_kbit_training
+   
+   model = AutoModelForCausalLM.from_pretrained(
+       "modele/base",
+       load_in_4bit=True,
+       device_map="auto",
+       quantization_config=BitsAndBytesConfig(
+           load_in_4bit=True,
+           bnb_4bit_compute_dtype=torch.float16,
+           bnb_4bit_quant_type="nf4",
+           bnb_4bit_use_double_quant=True
+       )
    )
-   from sentence_transformers.losses import (
-       MultipleNegativesRankingLoss,
-       CosineSimilarityLoss
+   
+   model = prepare_model_for_kbit_training(model)
+
+2. Configuration LoRA :
+
+.. code-block:: python
+
+   from peft import LoraConfig, get_peft_model
+   
+   config = LoraConfig(
+       r=64,                     # Rang de l'adaptation
+       lora_alpha=16,           # Paramètre d'échelle
+       target_modules=["q_proj", "k_proj", "v_proj", "o_proj"],
+       lora_dropout=0.1,
+       bias="none",
+       task_type="CAUSAL_LM"
    )
-   from transformers import AutoModel, AutoTokenizer
+   
+   model = get_peft_model(model, config)
 
-Processus de Fine-tuning
------------------------
+Paramètres Clés
+--------------
 
-Le processus de fine-tuning se déroule en plusieurs étapes clés :
+:blue:`Paramètres de Quantification` :
+- load_in_4bit : Active la quantification 4-bits
+- quant_type : "nf4" pour NormalFloat 4-bits
+- use_double_quant : Double quantification pour réduire la mémoire
 
-1. :blue:`Préparation` des données médicales
-2. :green:`Configuration` du modèle et des hyperparamètres
-3. :orange:`Entraînement` avec les pertes adaptées
-4. :purple:`Évaluation` des performances
+:green:`Paramètres LoRA` :
+- r : Rang de l'adaptation (typiquement 8-256)
+- lora_alpha : Paramètre d'échelle pour l'adaptation
+- target_modules : Couches à adapter
+- lora_dropout : Régularisation dropout
 
-Architecture Matryoshka
-----------------------
-
-L'architecture :green:`Matryoshka` permet de générer des embeddings imbriqués de différentes dimensions, offrant une flexibilité accrue pour différents cas d'usage.
-
-Caractéristiques principales :
-- Dimensions : :blue:`384, 512, et 768 dimensions`
-- Performances : :green:`Haute précision à chaque niveau`
-- Adaptabilité : :orange:`Adaptation dynamique selon les besoins`
-
-Exemples de Code
+Bonnes Pratiques
 ---------------
 
-Configuration du modèle :
+1. :orange:`Gestion de la Mémoire` :
+   - Utiliser gradient_checkpointing=True
+   - Activer la double quantification
+   - Ajuster la taille de batch en fonction de la VRAM
 
-.. code-block:: python
+2. :green:`Optimisation` :
+   - Commencer avec r=8 et augmenter progressivement
+   - Surveiller la perte de validation
+   - Utiliser AdamW avec learning_rate=2e-4
 
-   model = SentenceTransformer('multilingual-e5-large')
-   
-   # Configuration des hyperparamètres
-   train_params = {
-       'epochs': 5,
-       'warmup_steps': 100,
-       'evaluation_steps': 1000,
-       'batch_size': 32
-   }
+3. :blue:`Évaluation` :
+   - Comparer avec le modèle de base
+   - Vérifier la perplexité
+   - Tester sur des tâches spécifiques
 
-   # Initialisation de la perte
-   loss = MultipleNegativesRankingLoss(model)
+Limitations et Considérations
+--------------------------
 
-Résultats et Métriques
-----------------------
+- La quantification peut affecter légèrement la précision
+- Certaines architectures peuvent nécessiter des ajustements spécifiques
+- Les performances dépendent de la qualité des données d'entraînement
 
-Nos expérimentations montrent des améliorations significatives :
-
-- Précision : :green:`+15% en précision`
-- Rappel : :blue:`+12% en rappel`
-- F1-Score : :orange:`+13.5% en F1-Score`
-
-Conclusion
----------
-
-Cette approche de fine-tuning des embeddings, combinée à l'architecture Matryoshka, offre une solution robuste et flexible pour l'analyse médicale, avec des performances améliorées sur l'ensemble des métriques évaluées.
+Pour plus d'informations techniques, consulter : 
+`QLoRA Paper <https://arxiv.org/abs/2305.14314>`_
