@@ -23,7 +23,7 @@ Notre Projet
 Interface Hugging Face
 --------------------
 
-.. figure:: medanalyzer_interface.png
+.. figure:: /Documentation/Images/Dataset.png
    :alt: Interface Hugging Face du Dataset MedAnalyzer
    :align: center
    :class: with-border
