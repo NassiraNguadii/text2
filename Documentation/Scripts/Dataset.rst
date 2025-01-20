@@ -31,48 +31,97 @@ Interface Hugging Face
 Nos Catégories d'Analyses
 ------------------------
 
-.. admonition:: Points Clés
-   :class: important
-
-   Les catégories suivantes constituent le cœur de notre dataset.
-
 1. Biochimie Sanguine
-~~~~~~~~~~~~~~~~~~~~
+--------------------
 
-.. admonition:: Focus
-   :class: note
+.. attention:: 
+   La biochimie sanguine constitue la base fondamentale de l'exploration biologique médicale, offrant une vision globale du fonctionnement métabolique.
 
-   Notre approche de la biochimie sanguine se concentre sur l'interprétation contextuelle des résultats.
+Électrolytes et équilibre hydro-électrolytique
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-**a) Électrolytes et équilibre hydro-électrolytique:**
+.. note::
+   Le dosage des électrolytes permet d'évaluer l'équilibre hydro-électrolytique de l'organisme. Pour le sodium et le potassium, l'interprétation repose sur l'analyse des gradients transmembranaires et leur régulation par la pompe Na+/K+ ATPase. Le calcium, évalué sous ses formes ionisée et totale, reflète l'homéostasie phosphocalcique, tenant compte de la liaison à l'albumine et de la régulation hormonale. Le magnésium, essentiel à la fonction neuromusculaire, nécessite une attention particulière aux carences fréquentes et leurs implications cliniques.
 
-.. warning::
-   L'interprétation des électrolytes nécessite une attention particulière aux contextes cliniques.
+Fonction rénale
+^^^^^^^^^^^^^
 
-* Na+/K+ avec analyse des gradients transmembranaires
-* Calcium ionisé vs calcium total
-* Magnésium et son impact sur la fonction neuromusculaire
-
-**b) Fonction rénale approfondie:**
-
-.. hint::
-   Le DFG est un paramètre clé dans l'évaluation de la fonction rénale.
-
-* Ratio urée/créatinine pour différencier les causes d'insuffisance rénale
-* DFG avec les différentes formules de calcul (CKD-EPI, MDRD)
-* Clearance de la créatinine mesurée vs estimée
+.. important::
+   L'évaluation de la fonction rénale s'appuie sur plusieurs marqueurs complémentaires. Le ratio urée/créatinine aide à distinguer les différentes causes d'insuffisance rénale, tandis que le DFG estimé par les formules CKD-EPI ou MDRD quantifie précisément la filtration glomérulaire. La clearance de la créatinine mesurée apporte des informations supplémentaires, particulièrement utiles dans les situations complexes ou atypiques.
 
 2. Hématologie
-~~~~~~~~~~~~~
+-------------
 
 .. attention::
-   L'analyse hématologique requiert une approche systématique et rigoureuse.
+   L'hématologie combine l'analyse morphologique et fonctionnelle des cellules sanguines.
 
-**a) Analyse morphologique:**
+Analyse morphologique
+^^^^^^^^^^^^^^^^^^
 
-* Classifications des anomalies érythrocytaires
-* Signification des corps de Jolly et anneaux de Cabot
-* Variations lymphocytaires réactionnelles vs pathologiques
+.. note::
+   L'étude morphologique des cellules sanguines révèle des informations diagnostiques précieuses. Les anomalies érythrocytaires, qu'elles concernent la taille, la forme ou le contenu, orientent vers des pathologies spécifiques. Les corps de Jolly et les anneaux de Cabot signent des dysfonctionnements médullaires ou spléniques. Les variations lymphocytaires permettent de distinguer les réactions physiologiques des processus pathologiques.
+
+3. Sérologie
+------------
+
+.. attention::
+   La sérologie étudie la réponse immunitaire humorale et son évolution temporelle.
+
+Profils sérologiques
+^^^^^^^^^^^^^^^^^
+
+.. note::
+   L'interprétation sérologique se base sur la cinétique des anticorps. Dans les hépatites virales, la succession des marqueurs permet de dater l'infection et d'évaluer son évolution. Les profils atypiques nécessitent une analyse approfondie, particulièrement en contexte d'immunodépression. Les sérologies particulières, comme celles des zoonoses ou des maladies tropicales, s'interprètent selon le contexte épidémiologique.
+
+4. Immunologie
+-------------
+
+.. attention::
+   L'immunologie explore les mécanismes de défense de l'organisme et leurs dérèglements.
+
+Auto-immunité
+^^^^^^^^^^^
+
+.. note::
+   L'exploration des maladies auto-immunes suit une démarche systématique. Les panels d'anticorps, organisés par pathologie, permettent une classification précise. Les algorithmes diagnostiques intègrent données cliniques et biologiques. L'immunophénotypage apporte des informations cruciales sur les sous-populations lymphocytaires et leur état d'activation.
+
+5. Microbiologie
+---------------
+
+.. attention::
+   La microbiologie moderne s'appuie sur des technologies avancées d'identification.
+
+Analyses microbiologiques
+^^^^^^^^^^^^^^^^^^^^^^
+
+.. note::
+   L'identification microbienne par spectrométrie de masse MALDI-TOF permet une caractérisation rapide et précise. L'étude des résistances aux antibiotiques intègre les mécanismes émergents. La parasitologie emploie des techniques de concentration et de diagnostic moléculaire, corrélant la charge parasitaire aux manifestations cliniques.
+
+6. Gaz du Sang
+-------------
+
+.. attention::
+   L'analyse des gaz du sang évalue les équilibres acido-basiques et l'oxygénation.
+
+Paramètres et interprétation
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. note::
+   L'interprétation des gaz sanguins nécessite une analyse systématique des paramètres acido-basiques et de l'oxygénation. Les gradients alvéolo-artériels quantifient l'efficacité des échanges gazeux. Les compensations respiratoires et métaboliques suivent des règles physiologiques précises. Les paramètres dérivés enrichissent l'évaluation de l'oxygénation tissulaire.
+
+7. Hormonologie
+--------------
+
+.. attention::
+   L'hormonologie étudie les régulations endocriniennes et leurs perturbations.
+
+Explorations hormonales
+^^^^^^^^^^^^^^^^^^^^
+
+.. note::
+   Les explorations hormonales dynamiques évaluent la réactivité des axes endocriniens. Les tests de stimulation standardisés permettent d'apprécier les réserves glandulaires. L'interprétation tient compte des variations circadiennes et des interactions médicamenteuses. L'endocrinologie spécialisée explore les axes complexes comme l'axe hypothalamo-hypophysaire et le métabolisme phospho-calcique.
+
+
 
 Structure des Données
 -------------------
