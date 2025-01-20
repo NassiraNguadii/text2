@@ -27,7 +27,8 @@ Introduction
 
 Dans le domaine médical, l'exactitude des données est primordiale. C'est dans cette optique que nous avons réalisé un benchmark approfondi de trois systèmes OCR sur nos analyses sanguines. Notre objectif était simple : déterminer quel système de reconnaissance de caractères offre la meilleure fiabilité pour la numérisation des résultats d'analyses médicales.
 
-Notebook Jupyter associé : Voir le notebook complet /Documentation/notebooks/benchmark__ocripynb.ipynb
+`Notebook Jupyter </Documentation/notebooks/benchmark__ocripynb.ipynb>`_
+
 
 Architecture du Benchmark
 ------------------------
