@@ -9,7 +9,7 @@ MedAnalyzer Dataset
    :local:
    :backlinks: none
 
-Notre Projet
+MedAnalyzer
 -----------
 
 .. note:: 
@@ -23,7 +23,7 @@ Notre Projet
 Interface Hugging Face
 --------------------
 
-.. figure:: /Documentation/Images/Dataset.png
+.. figure:: /Documentation/Images/dataset.png
    :alt: Interface Hugging Face du Dataset MedAnalyzer
    :align: center
    :class: with-border
