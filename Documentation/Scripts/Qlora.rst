@@ -90,12 +90,35 @@ Quantification pendant l'Entraînement
 2.1 Composants Fondamentaux
 -------------------------
 
-.. figure:: qrola_architecture.png
-   :alt: Architecture QLoRA Détaillée
-   :width: 800px
-   :align: center
+.. code-block::
 
-   :purple:`Architecture Détaillée de QLoRA`
+    Architecture QLoRA Détaillée
+    +--------------------------+
+    |     Modèle Original      |
+    |     (32-bit weights)     |
+    +------------+-------------+
+           |
+    +------------v-------------+
+    |    4-bit NormalFloat    |
+    |    Quantification       |
+    +------------+-------------+
+           |
+    +------------v-------------+
+    |  Double Quantification  |
+    |  Optimisation mémoire   |
+    +------------+-------------+
+           |
+    +------------v-------------+
+    |   Optimiseurs Paginés   |
+    |   Gestion GPU/CPU       |
+    +------------+-------------+
+           |
+    +------------v-------------+
+    |    Adaptation LoRA      |
+    |    Matrices A et B      |
+    +--------------------------+
+
+    :purple:`Architecture Détaillée de QLoRA`
 
 NormalFloat 4-bit Enrichi
 ^^^^^^^^^^^^^^^^^^^^^^^
@@ -186,14 +209,22 @@ Prérequis Matériels
 Phases Principales
 ^^^^^^^^^^^^^^^^
 
-.. code-block:: mermaid
+.. code-block::
     :caption: Flux d'Entraînement QLoRA
 
-    graph TD
-        A[Données Brutes] -->|Préparation| B(Tokenization)
-        B -->|Configuration| C{QLoRA}
-        C -->|Training| D[Modèle Optimisé]
-        C -->|Monitoring| E[Métriques]
+    [Données Brutes]
+          |
+          v
+    [Tokenization]
+          |
+          v
+    +-----{QLoRA}-----+
+          |     |
+          v     v
+    [Modèle]  [Métriques]
+    Optimisé   & Monitoring
+
+    :blue:`Flux d'entraînement complet de QLoRA`
 
 4. Optimisations Avancées
 ========================
