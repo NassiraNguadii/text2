@@ -1,245 +1,245 @@
-==============================================
-Guide Complet : Quantification et QLoRA
-==============================================
-
-1. Qu'est-ce que la Quantification ?
-==============================================
-
-.. _section-definition:
-
-Définition
-----------
-
-La quantification est une technique utilisée pour simplifier les nombres en les regroupant dans des "catégories" ou "tranches". Au lieu de conserver toutes les valeurs possibles, on les arrondit ou les ajuste pour qu'elles correspondent à des catégories fixes.
-
-Exemple Détaillé
----------------
-
-Prenons cette série de nombres::
-
-    Originaux : 1, 12, 27, 55,3, 83,7823
-
-Après quantification :
-
-.. list-table:: Résultats de la Quantification
-   :header-rows: 1
-   :widths: 40 60
-
-   * - Type de Quantification
-     - Résultat
-   * - Nombres entiers
-     - 1, 12, 27, 55, 83
-   * - Multiples de 10
-     - 0, 10, 30, 50, 80
-
-.. note::
-    Ce processus permet de réduire la taille des données, les rendant plus rapides à traiter, tout en restant proches des valeurs d'origine.
-
-2. Pourquoi Avons-nous Besoin de la Quantification ?
-==================================================
-
-Problématique
-------------
-
-La quantification répond à un besoin crucial de réduction de la mémoire utilisée dans les modèles d'apprentissage automatique.
-
-Problème Concret
----------------
-
-Format FP32 (virgule flottante 32 bits):
-
-.. list-table:: Impact sur la Mémoire
-   :widths: 40 60
-
-   * - Taille par nombre
-     - 32 bits (4 octets)
-   * - Modèle de 10 milliards de paramètres
-     - 40 Go
-   * - Besoins pendant le fine-tuning
-     - Jusqu'à 200 Go
-
-Le Défi
--------
-
-.. attention::
-    Ces besoins en mémoire très élevés posent deux défis majeurs :
-
-    * Garantir une précision suffisante
-    * Optimiser l'utilisation de la mémoire
-
-3. QLoRA (Quantized Low-Rank Adaptation)
-=======================================
-
-Vue d'Ensemble
--------------
-
-QLoRA est une méthode qui optimise l'utilisation de la mémoire tout en maintenant les performances des modèles.
-
-Composants Principaux
---------------------
-
-.. list-table:: Les 4 Ingrédients de QLoRA
-   :widths: 30 70
-
-   * - Quantification
-     - Réduction de la taille des paramètres
-   * - Double quantification
-     - Optimisation supplémentaire
-   * - Optimiseurs paginés
-     - Gestion efficace de la mémoire
-   * - LoRA
-     - Adaptation de rang faible
-
-4. Ingrédient 1 : 4-bit NormalFloat
-==================================
-
-Principe
---------
-
-Le 4-bit NormalFloat utilise seulement 4 bits pour représenter les nombres, limitant les valeurs possibles à 16.
-
-Exemple Pratique
----------------
-
-.. code-block:: python
-
-    # Valeurs originales
-    valeurs_originales = [3.7, 2.4, 0.5, 7.8]
-    
-    # Après quantification en 4-bit
-    # Seulement 16 valeurs possibles
-    # Distribution optimisée près de 0
-
-5. Ingrédient 2 : Double Quantification
-=====================================
-
-Processus en Trois Étapes
-------------------------
-
-Étape 1 : Quantification de Base
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: python
-
-    # Facteur de mise à l'échelle
-    c_FP32 = 127 / 12.8  # ≈ 9.92
-
-    # Valeurs originales et quantifiées
-    original = [5.3, 12.8, 2.4, -3.6, 8.1]
-    quantifie = [53, 127, 24, -35, 80]
-
-Étape 2 : Quantification par Bloc
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Bloc 1::
-
-    Valeurs: [5.3, 12.8, 2.4]
-    Facteur: 9.92
-    Résultats: [53, 127, 24]
-
-Bloc 2::
-
-    Valeurs: [-3.6, 8.1]
-    Facteur: 15.7
-    Résultats: [-57, 127]
-
-Étape 3 : Double Quantification
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. list-table:: Quantification des Constantes
-   :header-rows: 1
-   :widths: 33 33 33
-
-   * - Constante Originale
-     - Type
-     - Valeur Quantifiée
-   * - 9.92
-     - Int8
-     - 10
-   * - 15.7
-     - Int8
-     - 16
-
-6. Ingrédient 3 : Optimiseurs Paginés
+===================================
+Guide Détaillé : QLoRA et Quantification
 ===================================
 
-Architecture
+.. contents:: Table des Matières
+   :depth: 3
+   :backlinks: none
+
+.. role:: red
+.. role:: green
+.. role:: blue
+.. role:: orange
+
+Introduction
 -----------
+.. note::
+    La quantification et QLoRA représentent des avancées majeures dans l'optimisation des modèles d'IA.
 
-.. code-block:: text
+1. Fondamentaux de la Quantification
+================================
 
-    +-------------+     +----------------+     +-------------+
-    |   Mémoire   | <-> |   Optimiseur   | <-> |   Mémoire   |
-    |     GPU     |     |     Paginé     |     |     CPU     |
-    +-------------+     +----------------+     +-------------+
+1.1 Définition Approfondie
+------------------------
 
-Étapes de Fonctionnement
+.. important::
+    La quantification est un processus de :blue:`conversion` des nombres à virgule flottante en format réduit.
+
+Caractéristiques Principales
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+* Réduction de la précision numérique
+* Mapping vers des valeurs discrètes
+* Conservation de l'information essentielle
+
+1.2 Exemples Détaillés
+--------------------
+
+.. code-block:: python
+    :caption: Exemple de Quantification
+    :emphasize-lines: 4,5
+
+    # Valeurs originales (32 bits)
+    originales = [1.234, 5.678, 9.012, 3.456]
+
+    # Quantification 8 bits
+    quantifiees = [1, 6, 9, 3]
+
+.. list-table:: Comparaison des Formats
+   :header-rows: 1
+   :widths: 25 25 25 25
+   :class: green-headers
+
+   * - Format
+     - Bits
+     - Précision
+     - Usage Mémoire
+   * - FP32
+     - 32
+     - Maximale
+     - 100%
+   * - INT8
+     - 8
+     - Réduite
+     - 25%
+   * - INT4
+     - 4
+     - Minimale
+     - 12.5%
+
+2. Architecture QLoRA Détaillée
+============================
+
+2.1 Vue d'Ensemble
+----------------
+
+.. figure:: qrola_architecture.png
+   :alt: Architecture QLoRA
+   :width: 600px
+   :align: center
+
+   Architecture Complète de QLoRA
+
+2.2 Composants Principaux
 -----------------------
 
-1. Entraînement Normal
-   
-   * Stockage en GPU
-   * Calculs standards
+NormalFloat 4-bit
+^^^^^^^^^^^^^^^^
 
-2. Gestion des Pics
-   
-   * Détection saturation
-   * Transfert vers CPU
+.. code-block:: rst
+    :caption: Structure NormalFloat
 
-3. Récupération
-   
-   * Rechargement si nécessaire
-   * Gestion dynamique
+    +---------------+----------------+
+    | :red:`Signe` | :blue:`Valeur` |
+    +---------------+----------------+
+    |    1 bit     |     3 bits     |
+    +---------------+----------------+
 
-7. Ingrédient 4 : LoRA
-=====================
-
-Principe Mathématique
---------------------
+Double Quantification
+^^^^^^^^^^^^^^^^^^^
 
 .. math::
 
-    W' = W + (A \times B)
+    Q(x) = \text{round}\left(\frac{x}{\text{scale}}\right)
 
 Où:
+    - x : valeur originale
+    - scale : facteur d'échelle
 
-* W = Matrice originale
-* A, B = Matrices d'ajustement
-* W' = Résultat final
+3. Implémentation Détaillée
+========================
 
-Exemple : Traduction
+3.1 Configuration Initiale
+------------------------
+
+.. code-block:: python
+    :caption: Configuration de Base
+    :emphasize-lines: 3,4
+
+    import torch
+    
+    BATCH_SIZE = 32
+    QUANTIZATION_BITS = 4
+
+3.2 Processus de Quantification
+----------------------------
+
+.. code-block:: python
+    :caption: Processus de Quantification
+
+    def quantifier_tenseur(tensor, bits=4):
+        # Calcul des limites
+        min_val = tensor.min()
+        max_val = tensor.max()
+        
+        # Calcul du pas de quantification
+        step = (max_val - min_val) / (2**bits - 1)
+        
+        # Quantification
+        quantified = torch.round((tensor - min_val) / step)
+        
+        return quantified, min_val, step
+
+4. Optimisations Avancées
+======================
+
+4.1 Gestion de la Mémoire
+-----------------------
+
+.. warning::
+    L'optimisation de la mémoire est cruciale pour les grands modèles.
+
+Stratégies d'Optimisation
+^^^^^^^^^^^^^^^^^^^^^^^
+
+.. list-table:: Techniques d'Optimisation
+   :header-rows: 1
+   :widths: 30 70
+   :class: orange-headers
+
+   * - Technique
+     - Description
+   * - Pagination
+     - Transfert dynamique GPU ↔ CPU
+   * - Compression
+     - Réduction taille en mémoire
+   * - Cache
+     - Optimisation accès données
+
+4.2 Performances
+-------------
+
+Métriques de Performance
+^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: rst
+
+    Performance = {
+        'Vitesse': ↑ 2x-4x,
+        'Mémoire': ↓ 75%,
+        'Précision': ≈ 98%
+    }
+
+5. Cas d'Utilisation Pratiques
+===========================
+
+5.1 Exemples Concrets
 -------------------
 
-.. list-table:: Comparaison des Approches
-   :widths: 50 50
+.. code-block:: python
+    :caption: Application Pratique
 
-   * - **Méthode Traditionnelle**
-     - **Approche LoRA**
-   * - Réentraînement complet
-     - Conservation des paramètres
-   * - Coût élevé
-     - Ajout de A et B uniquement
-   * - Ressources importantes
-     - Entraînement ciblé
+    # Configuration QLoRA
+    config = LoraConfig(
+        r=8,                     # rang de l'adaptation
+        lora_alpha=32,          # facteur d'échelle
+        target_modules=["q", "v"],
+        lora_dropout=0.05,
+        bias="none",
+        task_type="CAUSAL_LM"
+    )
 
-Avantages
----------
+5.2 Bonnes Pratiques
+------------------
 
-1. Efficacité mémoire
-2. Flexibilité
-3. Réutilisabilité
+.. tip::
+    - Toujours monitorer la mémoire GPU
+    - Ajuster les hyperparamètres progressivement
+    - Valider sur un petit ensemble de données
 
 Conclusion
-=========
+---------
 
-La combinaison QLoRA permet trois avantages majeurs :
+.. important::
+    QLoRA représente une avancée majeure pour :green:`l'optimisation` des modèles d'IA.
 
-.. list-table:: Bénéfices de QLoRA
-   :widths: 30 70
+Bénéfices Principaux:
+    1. :green:`Réduction significative` de la mémoire
+    2. :blue:`Maintien` des performances
+    3. :orange:`Démocratisation` de l'IA
 
-   * - Mémoire
-     - Réduction significative
-   * - Performance
-     - Maintien du niveau
-   * - Accessibilité
-     - Démocratisation de l'IA
+Annexes
+------
+
+Glossaire
+^^^^^^^^
+
+.. glossary::
+
+   Quantification
+      Processus de réduction de la précision numérique
+
+   LoRA
+      Low-Rank Adaptation, technique d'adaptation de modèles
+
+   QLoRA
+      Quantized Low-Rank Adaptation
+
+Références
+^^^^^^^^^
+
+.. [1] Tim Dettmers et al. (2023) "QLoRA: Efficient Finetuning of Quantized LLMs"
+.. [2] Documentation officielle PyTorch sur la quantification
+.. [3] Guides d'implémentation Hugging Face
+
+.. note::
+    Pour plus d'informations, consultez la documentation officielle ou les publications académiques citées.
