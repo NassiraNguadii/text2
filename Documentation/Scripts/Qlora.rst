@@ -253,6 +253,33 @@ Stratégies Avancées
 4.2 Métriques de Performance
 -------------------------
 
+.. code-block:: python
+    :caption: Monitoring des Performances
+
+    def evaluer_performances(model, validation_data):
+        """
+        :purple:`Évaluation complète des performances`
+        :green:`Mesure de la précision et de la vitesse`
+        :orange:`Analyse de l'utilisation mémoire`
+        """
+        # Mesure de l'utilisation mémoire
+        torch.cuda.reset_peak_memory_stats()
+        memoire_avant = torch.cuda.memory_allocated()
+        
+        # Évaluation du modèle
+        resultats = model(validation_data)
+        
+        # Calcul des métriques
+        memoire_apres = torch.cuda.memory_allocated()
+        memoire_pic = torch.cuda.max_memory_allocated()
+        
+        return {
+            "precision": resultats.accuracy,
+            "memoire_utilisee": memoire_apres - memoire_avant,
+            "memoire_pic": memoire_pic,
+            "vitesse_inference": resultats.inference_time
+        }
+
 Indicateurs Clés
 ^^^^^^^^^^^^^^
 
