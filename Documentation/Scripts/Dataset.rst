@@ -2,12 +2,7 @@
 MedAnalyzer Dataset
 ===================
 
-.. attention:: Documentation technique du dataset MedAnalyzer
 
-.. contents:: Table des matières
-   :depth: 2
-   :local:
-   :backlinks: none
 
 MedAnalyzer
 -----------
