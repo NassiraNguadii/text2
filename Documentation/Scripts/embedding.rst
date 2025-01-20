@@ -83,9 +83,6 @@ L'infrastructure nécessaire comprend un GPU avec support CUDA, un minimum de 16
 :green:`Résultats et Performances`
 -----------------------------
 .. image:: /Documentation/Images/evaluation.png
-:alt: Comparaison des performances avant et après fine-tuning
-:align: center
-**Améliorations par Dimension**
 
 :green:`Dimension 1024 (Haute Précision)`
 Le score NDCG@10 s'est amélioré de 0.7967 à 0.8484, montrant une progression de 5.17%.
