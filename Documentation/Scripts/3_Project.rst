@@ -27,12 +27,12 @@ Introduction
 
 Dans le domaine médical, l'exactitude des données est primordiale. C'est dans cette optique que nous avons réalisé un benchmark approfondi de trois systèmes OCR sur nos analyses sanguines. Notre objectif était simple : déterminer quel système de reconnaissance de caractères offre la meilleure fiabilité pour la numérisation des résultats d'analyses médicales.
 
-Notebook Jupyter associé : `Voir le notebook complet <https://github.com/NassiraNguadii/text2/blob/main/Documentation/notebooks/benchmark__ocripynb.ipynb>`_
+Notebook Jupyter associé : `Voir le notebook complet /Documentation/notebooks/benchmark__ocripynb.ipynb>`_
 
 Architecture du Benchmark
 ------------------------
 
-.. image:: image4
+.. image:: /Documentation/Images/image4
    :alt: Structure des fichiers
 
 Le benchmark repose sur une architecture binaire : un dossier 'ground_truth' contenant nos textes de référence, et un dossier 'images_analyse' regroupant nos scans à traiter. Cette approche nous permet de comparer directement les résultats OCR avec les données originales de nos 20 analyses sanguines.
@@ -43,7 +43,7 @@ Résultats de notre étude
 :blue:`Doctr : L'équilibriste`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: image1
+.. image:: /Documentation/Images/image1
    :alt: Résultats Doctr
 
 Doctr se révèle être le système le plus équilibré de notre benchmark. Sur nos 20 analyses sanguines, il atteint une :green:`précision de 84%` et un temps de traitement de :blue:`24,75 secondes` par document. Son F1 Score de :green:`0,79` confirme sa constance dans le traitement de nos documents médicaux.
@@ -63,7 +63,7 @@ Doctr se révèle être le système le plus équilibré de notre benchmark. Sur 
 :green:`EasyOCR : Le champion de la précision`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: image2
+.. image:: /Documentation/Images/image2
    :alt: Résultats EasyOCR
 
 EasyOCR excelle sur nos analyses sanguines avec :green:`87% de précision` et un F1 Score de :green:`0,83`. Son temps de traitement de :orange:`54,36 secondes` par document est plus long, mais sa précision sur nos paramètres biologiques est remarquable.
@@ -82,7 +82,7 @@ EasyOCR excelle sur nos analyses sanguines avec :green:`87% de précision` et un
 :red:`PaddleOCR : La rapidité au détriment de la précision`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: image3
+.. image:: /Documentation/Images/image3
    :alt: Résultats PaddleOCR
 
 Sur nos analyses sanguines, PaddleOCR se montre décevant avec une :red:`précision de seulement 43%` et un F1 Score de :red:`0,32`, malgré sa rapidité de :green:`4,41 secondes` par document.
