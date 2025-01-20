@@ -196,22 +196,3 @@ La combinaison de la :blue:`quantification` et de :orange:`QLoRA` représente un
 .. note::
     L'avenir de ces technologies s'annonce prometteur, avec des développements continus et des applications toujours plus innovantes.
 
-Ressources et Soutien
--------------------
-
-Pour approfondir vos connaissances :
-
-1. **Documentation Technique**
-   - Guides d'implémentation détaillés
-   - Exemples de code
-   - Meilleures pratiques
-
-2. **Support Communautaire**
-   - Forums de discussion
-   - Groupes d'utilisateurs
-   - Ressources partagées
-
-3. **Formations et Tutoriels**
-   - Cours en ligne
-   - Ateliers pratiques
-   - Certifications
