@@ -64,7 +64,7 @@ Nous avons développé MedAnalyzer pour combler le manque de ressources structur
 Interface Hugging Face
 -------------------
 
-.. figure:: medanalyzer_interface.png
+.. figure:: /Documentation/Images/dataset.png
    :alt: Interface Hugging Face du Dataset MedAnalyzer
    :align: center
 
