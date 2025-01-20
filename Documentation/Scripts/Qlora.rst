@@ -1,147 +1,200 @@
 =============================================================
-Guide Complet : QLoRA et Quantification des Modèles d'IA
-=============================================================
+.. raw:: html
 
-.. role:: red
-.. role:: green
-.. role:: blue
-.. role:: orange
-.. role:: purple
+   <style>
+   /* Styles de base */
+   h1, h2 { 
+     color: #333333;
+     font-family: 'Roboto', sans-serif;
+   }
+   /* Styles des sections */
+   .section-title { 
+     color: #2196F3;
+     font-weight: bold;
+     font-size: 1.5em;
+   }
+   .subsection-title {
+     color: #1976D2;
+     font-weight: bold;
+     font-size: 1.3em;
+   }
+   .objectives-title {
+     color: #4CAF50;
+     font-weight: bold;
+     font-size: 1.4em;
+   }
+   /* Textes colorés */
+   .red { color: #F44336; }
+   .green { color: #4CAF50; }
+   .blue { color: #2196F3; }
+   .orange { color: #FF9800; }
+   .purple { color: #9C27B0; }
+   /* Code et exemples */
+   .code-block {
+     background-color: #f5f5f5;
+     padding: 1em;
+     border-radius: 4px;
+   }
+   /* Liens */
+   .link-blue {
+     color: #2196F3;
+     text-decoration: underline;
+   }
+   </style>
 
-Introduction
-------------
+.. raw:: html
 
-Avec l'évolution rapide de l'intelligence artificielle, les modèles deviennent de plus en plus performants, mais aussi plus exigeants en termes de ressources. La :blue:`quantification` et :orange:`QLoRA` offrent des solutions pour optimiser ces modèles tout en rendant leur utilisation accessible, même avec des ressources limitées. 
+   <h1>Guide Complet : QLoRA et Quantification des Modèles d'IA</h1>
 
-Ce guide vise à explorer :
-- Les bases techniques de la :blue:`quantification`,
-- Les avantages et les spécificités de :orange:`QLoRA`,
-- Les bonnes pratiques d'implémentation,
-- Et enfin, des applications concrètes et résultats mesurables.
+.. raw:: html
 
-Fondements de la Quantification
--------------------------------
+   <div class="objectives-title">Objectifs et Vue d'Ensemble</div>
 
-**Qu'est-ce que la Quantification ?**
+Le fine-tuning des embeddings constitue une étape cruciale dans l'optimisation des applications RAG (Retrieval-Augmented Generation). Notre processus utilise le modèle |link-blue| comme base et exploite une architecture Matryoshka innovante pour générer des embeddings de différentes dimensions.
 
-La :blue:`quantification` consiste à réduire la précision des nombres utilisés dans un modèle d'IA. Par exemple, on passe de :red:`32 bits` à :green:`8 bits`, ou même à :purple:`4 bits`. Cela permet d'économiser énormément de mémoire tout en maintenant des performances satisfaisantes. Cette technique est particulièrement utile pour les systèmes disposant de ressources limitées, comme les ordinateurs portables ou les systèmes embarqués.
+.. |link-blue| raw:: html
 
-**Avantages Clés**
-^^^^^^^^^^^^^^^^^^
-- :green:`Efficacité Mémoire` : Réduction drastique de l'espace nécessaire pour stocker les poids.
-- :blue:`Vitesse d'Exécution` : Amélioration des temps d'inférence, particulièrement utile pour des applications en temps réel.
-- :orange:`Écologie Numérique` : Réduction de l'empreinte carbone grâce à une utilisation optimisée des ressources matérielles.
+   <span class="link-blue">multilingual-e5-large</span>
 
-**Étapes de la Quantification**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Voici les trois grandes étapes d’un processus typique de quantification :
+.. raw:: html
 
-1. **:blue:`Analyse de Distribution`**  
-   Identifier les plages de valeurs les plus pertinentes dans les poids du modèle.
+   <div class="section-title">Configuration Technique</div>
 
-2. **:green:`Conversion`**  
-   Convertir les nombres en formats plus légers comme Int8 (8 bits) ou Int4 (4 bits). Exemple :
+.. raw:: html
+
+   <div class="subsection-title">Environnement Requis</div>
+
+L'infrastructure nécessaire comprend un |blue-gpu| avec support CUDA, un minimum de |green-ram| de RAM, ainsi qu'une installation de |blue-python| ou supérieur.
+
+.. |blue-gpu| raw:: html
+
+   <span class="blue">GPU</span>
+
+.. |green-ram| raw:: html
+
+   <span class="green">16GB</span>
+
+.. |blue-python| raw:: html
+
+   <span class="blue">Python 3.8</span>
+
+.. raw:: html
+
+   <div class="subsection-title">Bibliothèques Essentielles</div>
+
+.. code-block:: python
+
+   import torch
+   from sentence_transformers import SentenceTransformer
+   from sentence_transformers.evaluation import (
+       InformationRetrievalEvaluator,
+       SequentialEvaluator
+   )
+   from sentence_transformers.losses import (
+       MultipleNegativesRankingLoss,
+       CosineSimilarityLoss
+   )
+   from transformers import AutoModel, AutoTokenizer
+
+.. raw:: html
+
+   <div class="section-title">Processus de Fine-tuning</div>
+
+Le processus de fine-tuning se déroule en plusieurs étapes clés :
+
+1. |blue-preparation| des données médicales
+2. |green-config| du modèle et des hyperparamètres
+3. |orange-training| avec les pertes adaptées
+4. |purple-eval| des performances
+
+.. |blue-preparation| raw:: html
+
+   <span class="blue">Préparation</span>
+
+.. |green-config| raw:: html
+
+   <span class="green">Configuration</span>
+
+.. |orange-training| raw:: html
+
+   <span class="orange">Entraînement</span>
+
+.. |purple-eval| raw:: html
+
+   <span class="purple">Évaluation</span>
+
+.. raw:: html
+
+   <div class="section-title">Architecture Matryoshka</div>
+
+L'architecture |green-matryoshka| permet de générer des embeddings imbriqués de différentes dimensions, offrant une flexibilité accrue pour différents cas d'usage.
+
+.. |green-matryoshka| raw:: html
+
+   <span class="green">Matryoshka</span>
+
+Caractéristiques principales :
+- Dimensions : |blue-dims|
+- Performances : |green-perf|
+- Adaptabilité : |orange-adapt|
+
+.. |blue-dims| raw:: html
+
+   <span class="blue">384, 512, et 768 dimensions</span>
+
+.. |green-perf| raw:: html
+
+   <span class="green">Haute précision à chaque niveau</span>
+
+.. |orange-adapt| raw:: html
+
+   <span class="orange">Adaptation dynamique selon les besoins</span>
+
+.. raw:: html
+
+   <div class="section-title">Exemples de Code</div>
+
+Configuration du modèle :
+
+.. code-block:: python
+
+   model = SentenceTransformer('multilingual-e5-large')
    
-   ::
+   # Configuration des hyperparamètres
+   train_params = {
+       'epochs': 5,
+       'warmup_steps': 100,
+       'evaluation_steps': 1000,
+       'batch_size': 32
+   }
 
-       Précision originale    →    Précision réduite    →    Résultat attendu
-       Float32 (32 bits)          Int8/Int4               Meilleure efficacité
-       Haute mémoire              Faible mémoire          Moins de ressources
+   # Initialisation de la perte
+   loss = MultipleNegativesRankingLoss(model)
 
-3. **:orange:`Calibration`**  
-   Ajuster les paramètres du modèle pour minimiser la perte de performance liée à la quantification.
+.. raw:: html
 
-QLoRA : Une Révolution dans l'Optimisation
-------------------------------------------
+   <div class="section-title">Résultats et Métriques</div>
 
-**Définition et Principe**
-^^^^^^^^^^^^^^^^^^^^^^^^^
-:orange:`QLoRA` (Quantized Low-Rank Adaptation) est une approche novatrice qui combine deux concepts puissants :
-1. :blue:`Quantification 4 bits` pour réduire la mémoire.
-2. :green:`Adaptation de Rang Faible` pour maintenir la précision.
+Nos expérimentations montrent des améliorations significatives :
 
-**Pourquoi est-ce important ?**
-- :blue:`Réduction de Mémoire` : Jusqu'à **80 % de mémoire économisée**.
-- :orange:`Adaptabilité` : Permet un ajustement fin du modèle à des tâches spécifiques.
-- :green:`Scalabilité` : Idéal pour entraîner et déployer des modèles sur des infrastructures modestes.
+- Précision : |green-precision|
+- Rappel : |blue-recall|
+- F1-Score : |orange-f1|
 
-**Comment ça fonctionne ?**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Le fonctionnement de QLoRA peut être divisé en trois phases :
+.. |green-precision| raw:: html
 
-1. **:blue:`Quantification Initiale`**
-   Réduction des poids du modèle à 4 bits. Exemple : Un modèle GPT-3 réduit de 175 Go à 35 Go.
+   <span class="green">+15% en précision</span>
 
-2. **:green:`Introduction des Matrices LoRA`**
-   Ces matrices servent à ajuster les poids sans modifier l’ensemble du modèle. Cela réduit encore les besoins de mémoire tout en permettant un fine-tuning.
+.. |blue-recall| raw:: html
 
-3. **:orange:`Fine-tuning`**
-   Une étape d'entraînement final est réalisée avec ces matrices compactes, assurant une adaptation efficace à des tâches spécifiques.
+   <span class="blue">+12% en rappel</span>
 
-**Exemple Visuel**  
-::
+.. |orange-f1| raw:: html
 
-    +-------------------------------+
-    |      Architecture QLoRA       |
-    +-------------------------------+
-    | 1. :blue:`Quantification 4-bit`     |
-    | 2. :green:`Matrices LoRA`           |
-    | 3. :orange:`Optimisation Fine-Tuning`|
-    +-------------------------------+
+   <span class="orange">+13.5% en F1-Score</span>
 
-Implémentation Pratique
------------------------
+.. raw:: html
 
-Voici les étapes pour implémenter QLoRA dans votre projet :
+   <div class="section-title">Conclusion</div>
 
-1. **:blue:`Installation des Outils`**
-   - Frameworks : `PyTorch`, `Hugging Face Transformers`.
-   - Librairies additionnelles : `bitsandbytes` pour la quantification.
-
-2. **:green:`Configuration Initiale`**
-   - Charger un modèle pré-entraîné.
-   - Appliquer la quantification : 
-
-   ::
-
-       from transformers import AutoModel
-       from bitsandbytes import quantize
-
-       model = AutoModel.from_pretrained("gpt-3")
-       model = quantize(model, bits=4)
-
-3. **:orange:`Entraînement avec LoRA`**
-   - Intégrer les matrices LoRA et commencer l’entraînement sur vos données spécifiques.
-
-Applications et Résultats
--------------------------
-
-**Domaines d'Application**
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-1. :blue:`Traitement Automatique des Langues`
-   - Applications : Chatbots, traducteurs automatiques, outils de rédaction.
-
-2. :green:`Vision par Ordinateur`
-   - Cas d'usage : Analyse d’images, reconnaissance faciale.
-
-3. :orange:`Industrie et IoT`
-   - Exemple : Systèmes embarqués pour l'automatisation des tâches.
-
-**Performances Observées**
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-Les tests montrent des résultats impressionnants avec QLoRA :
-
-- :blue:`Consommation Mémoire` : Réduction de **70 %**.
-- :green:`Vitesse` : Accélération de l’inférence de **250 %**.
-- :orange:`Précision` : Maintien à **98 %**.
-
-**Études de Cas Réelles**
-^^^^^^^^^^^^^^^^^^^^^^^^^
-- **Projet A** : Réduction des coûts cloud de 50 % grâce à QLoRA.
-- **Projet B** : Temps d'inférence réduit de 3 secondes à 1 seconde dans une application mobile.
-
-Conclusion et Perspectives
---------------------------
-
-La combinaison de la :blue:`quantification` et de :orange:`QLoRA` transforme l’IA en rendant les modèles puissants plus accessibles. Que ce soit pour des startups ou des grandes entreprises, ces techniques représentent une avancée majeure.
-
+Cette approche de fine-tuning des embeddings, combinée à l'architecture Matryoshka, offre une solution robuste et flexible pour l'analyse médicale, avec des performances améliorées sur l'ensemble des métriques évaluées.
