@@ -1,5 +1,5 @@
 =================================================
-Documentation QLoRA Fine-Tuning pour Modèles Médicaux
+QLoRA 
 =================================================
 
 .. role:: red
@@ -14,6 +14,9 @@ Documentation QLoRA Fine-Tuning pour Modèles Médicaux
 .. role:: orange
    :class: orange
 
+.. role:: purple
+   :class: purple
+
 .. raw:: html
 
    <style>
@@ -21,80 +24,67 @@ Documentation QLoRA Fine-Tuning pour Modèles Médicaux
    .green {color: #2ECC71;}
    .blue {color: #3498DB;}
    .orange {color: #E67E22;}
+   .purple {color: #9B59B6;}
    </style>
 
-:blue:`Introduction à QLoRA`
-------------------------
+:blue:`Aperçu QLoRA`
+-----------------
+QLoRA (Quantized Low-Rank Adaptation) combine la quantification 4-bits avec des adaptateurs Low-Rank pour optimiser le fine-tuning des LLMs.
 
-QLoRA (Quantized Low-Rank Adaptation) représente une avancée majeure dans le fine-tuning des LLMs. Cette méthode combine:
+:green:`Caractéristiques Principales`
+--------------------------------
+- Compression mémoire de 75%
+- Préservation qualité modèle
+- Vitesse optimisée
+- Adaptabilité renforcée
 
-1. Quantification 4-bits
-2. Adapters Low-Rank
-3. Optimisation mémoire GPU
-
-:green:`Avantages Clés`
-------------------
-* Réduction mémoire: -75%
-* Qualité préservée
-* Vitesse d'entraînement optimisée
-* Adaptabilité accrue
-
-:blue:`Configuration Technique`
+:orange:`Configuration Système`
 -------------------------
+**Matériel Requis:**
+~~~~~~~~~~~~~~~~~~~
+* :green:`GPU`: 16GB minimum
+* :blue:`RAM`: 32GB recommandé 
+* :red:`CUDA`: 11.7+
+* :purple:`Python`: 3.8+
 
-Prérequis Système
-~~~~~~~~~~~~~~~
-* GPU: 16GB minimum
-* RAM: 32GB recommandé
-* CUDA: 11.7+
-* Python: 3.8+
-
-Dépendances
-~~~~~~~~~~
+:red:`Dépendances Critiques`
+------------------------
 .. code-block:: python
 
-    # requirements.txt
-    bitsandbytes>=0.39.0
-    transformers>=4.30.0
-    peft>=0.4.0
-    accelerate>=0.20.3
-    datasets>=2.12.0
-    scipy
-    torch>=2.0.0
+    bitsandbytes>=0.39.0  # :red:`Quantification`
+    transformers>=4.30.0   # :blue:`Base modèle`
+    peft>=0.4.0           # :green:`Adapters LoRA`
+    accelerate>=0.20.3    # :orange:`Optimisation`
+    datasets>=2.12.0      # :purple:`Gestion données`
 
-:orange:`Architecture QLoRA`
-----------------------
+:blue:`Architecture Détaillée`
+-------------------------
+**Configuration Modèle:**
 
-Configuration Base
-~~~~~~~~~~~~~~~
 .. code-block:: python
 
-    from transformers import AutoModelForCausalLM, AutoTokenizer
-    from peft import prepare_model_for_kbit_training
-    from peft import LoraConfig, get_peft_model
-
-    # Chargement modèle quantifié
+    # :green:`Initialisation modèle quantifié`
     model = AutoModelForCausalLM.from_pretrained(
         "mistralai/Mistral-7B-v0.1",
         load_in_4bit=True,
         device_map="auto",
         quantization_config=BitsAndBytesConfig(
             load_in_4bit=True,
-            bnb_4bit_compute_dtype=torch.bfloat16,
-            bnb_4bit_use_double_quant=True,
-            bnb_4bit_quant_type="nf4"
+            bnb_4bit_compute_dtype=torch.bfloat16,  # :blue:`Type calcul`
+            bnb_4bit_use_double_quant=True,         # :orange:`Double quantification`
+            bnb_4bit_quant_type="nf4"              # :red:`Type quantification`
         )
     )
 
-Configuration LoRA
-~~~~~~~~~~~~~~
+:green:`Configuration LoRA`
+-----------------------
 .. code-block:: python
 
-    # Configuration LoRA
+    # :blue:`Paramètres adaptatifs`
     lora_config = LoraConfig(
-        r=64,  # Rang d'adaptation
-        lora_alpha=16,
-        target_modules=[
+        r=64,                # :green:`Rang adaptation`
+        lora_alpha=16,       # :orange:`Scaling factor`
+        target_modules=[     # :purple:`Modules ciblés`
             "q_proj",
             "k_proj",
             "v_proj",
@@ -103,167 +93,123 @@ Configuration LoRA
             "up_proj",
             "down_proj"
         ],
-        bias="none",
-        lora_dropout=0.05,
-        task_type="CAUSAL_LM"
+        bias="none",         # :red:`Configuration bias`
+        lora_dropout=0.05    # :blue:`Dropout régularisation`
     )
 
-:blue:`Processus d'Entraînement`
----------------------------
-
-Préparation
-~~~~~~~~~~
+:orange:`Paramètres d'Entraînement`
+-------------------------------
 .. code-block:: python
 
-    # Préparation modèle
-    model = prepare_model_for_kbit_training(model)
-    model = get_peft_model(model, lora_config)
-
-Configuration Trainer
-~~~~~~~~~~~~~~~~~
-.. code-block:: python
-
+    # :green:`Configuration entraînement`
     training_args = TrainingArguments(
         output_dir="./results",
-        num_train_epochs=3,
-        per_device_train_batch_size=4,
-        gradient_accumulation_steps=4,
-        learning_rate=2e-4,
-        logging_steps=10,
-        save_steps=100,
-        save_total_limit=2,
-        bf16=True,
-        max_grad_norm=0.3,
-        max_steps=-1,
-        optim="adamw_torch",
-        warmup_ratio=0.03
+        num_train_epochs=3,                # :blue:`Nombre epochs`
+        per_device_train_batch_size=4,     # :orange:`Taille batch`
+        gradient_accumulation_steps=4,      # :purple:`Accumulation gradients`
+        learning_rate=2e-4,                # :red:`Taux apprentissage`
+        logging_steps=10,                  # :green:`Fréquence logs`
+        save_steps=100,                    # :blue:`Sauvegarde checkpoints`
+        save_total_limit=2,                # :orange:`Limite sauvegardes`
+        bf16=True,                         # :purple:`Précision calculs`
+        max_grad_norm=0.3,                 # :red:`Clip gradient`
+        warmup_ratio=0.03                  # :green:`Warmup ratio`
     )
 
-:green:`Optimisation et Bonnes Pratiques`
+:purple:`Bonnes Pratiques d'Optimisation`
 -----------------------------------
 
-1. **Gestion Mémoire**
-   * Utilisation gradient checkpointing
-   * Batch size adaptatif
-   * Nettoyage cache CUDA régulier
+:green:`1. Gestion Mémoire`
+~~~~~~~~~~~~~~~~~~~~~~
+* Activation gradient checkpointing
+* Ajustement dynamique batch size
+* Nettoyage cache CUDA
+
+:blue:`2. Stabilité Entraînement`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+* Clip gradient (0.3)
+* Warmup progressif
+* Checkpoints réguliers
+
+:orange:`3. Suivi Performance`
+~~~~~~~~~~~~~~~~~~~~~~~~
+* Validation continue
+* Monitoring métriques
+* Early stopping
+
+:red:`Points de Vigilance`
+---------------------
+1. **Mémoire**
+    * Fuites potentielles
+    * Fragmentation
+    * Pics utilisation
 
 2. **Stabilité**
-   * Gradient clipping (0.3)
-   * Warmup progressif
-   * Sauvegarde checkpoints
+    * Gradients 4-bit
+    * Convergence
+    * Overflow numérique
 
-3. **Performance**
-   * Validation fréquente
-   * Monitoring des métriques
-   * Early stopping conditionnel
-
-:red:`Points d'Attention`
---------------------
-1. Fuites mémoire potentielles
-2. Instabilité gradients 4-bit
-3. Dégradation performances longues séquences
-
-:blue:`Métriques et Évaluation`
+:green:`Évaluation Performances`
 --------------------------
-
-Métriques Clés
-~~~~~~~~~~~~
-* Loss d'entraînement
-* Perplexité
-* BLEU Score (textes médicaux)
-* Exactitude diagnostique
-
-Validation
-~~~~~~~~~
 .. code-block:: python
 
-    from evaluate import load
-
-    # Métriques
-    bleu = load("bleu")
-    perplexity = load("perplexity")
-
+    # :blue:`Configuration métriques`
     def compute_metrics(eval_preds):
         logits, labels = eval_preds
         predictions = np.argmax(logits, axis=-1)
         
-        # Calcul métriques
+        # :green:`Calcul scores`
         bleu_score = bleu.compute(
             predictions=predictions,
             references=labels
         )
+        
         ppl = perplexity.compute(
             predictions=predictions,
             model_id="medical/model"
         )
         
         return {
-            "bleu": bleu_score["bleu"],
-            "perplexity": ppl["perplexity"]
+            "bleu": bleu_score["bleu"],     # :orange:`Score BLEU`
+            "perplexity": ppl["perplexity"] # :red:`Perplexité`
         }
 
-:orange:`Guide d'Utilisation Production`
----------------------------------
-
-Chargement Modèle
-~~~~~~~~~~~~~~
+:blue:`Déploiement Production`
+-------------------------
 .. code-block:: python
 
-    from peft import PeftModel, PeftConfig
-
-    # Chargement configuration
-    config = PeftConfig.from_pretrained(
-        "path/to/adapter"
-    )
-
-    # Chargement modèle
+    # :green:`Chargement modèle production`
+    config = PeftConfig.from_pretrained("path/to/adapter")
+    
     model = AutoModelForCausalLM.from_pretrained(
         config.base_model_name_or_path,
         load_in_4bit=True,
         device_map="auto"
     )
-
-    # Application adaptateurs
+    
+    # :orange:`Application adaptateurs`
     model = PeftModel.from_pretrained(
         model,
         "path/to/adapter"
     )
 
-Inférence
-~~~~~~~~
-.. code-block:: python
-
-    # Génération texte
-    inputs = tokenizer(
-        "Analysez les résultats suivants:",
-        return_tensors="pt"
-    ).to("cuda")
-
-    outputs = model.generate(
-        **inputs,
-        max_new_tokens=512,
-        temperature=0.7,
-        num_return_sequences=1
-    )
-
-:green:`Maintenance et Mise à Jour`
+:purple:`Maintenance et Monitoring`
 -----------------------------
-
-1. **Sauvegarde**
-   * Adaptateurs LoRA
+1. :green:`Sauvegarde`
+   * Adaptateurs
    * Configuration
-   * Métriques d'évaluation
+   * Métriques
 
-2. **Monitoring**
-   * Performance inférence
-   * Utilisation ressources
-   * Qualité prédictions
+2. :blue:`Surveillance`
+   * Performance
+   * Ressources
+   * Qualité
 
-3. **Mise à Jour**
-   * Fusion adaptateurs
-   * Mise à jour base model
-   * Réentraînement incrémental
+3. :orange:`Mise à Jour`
+   * Fusion
+   * Actualisation
+   * Réentraînement
 
-:blue:`Conclusion`
--------------
-QLoRA offre une solution efficace pour le fine-tuning de modèles médicaux larges, combinant efficacité computationnelle et qualité des résultats. Son implémentation requiert attention aux détails techniques mais permet une adaptation précise aux tâches médicales spécialisées.
+:green:`Conclusion`
+--------------
+QLoRA permet un fine-tuning efficient des modèles médicaux avec une empreinte mémoire réduite tout en maintenant la qualité.
