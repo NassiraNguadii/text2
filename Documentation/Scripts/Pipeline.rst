@@ -21,7 +21,7 @@ Pipeline de Traitement des Analyses Médicales
 -----------------------------
 Notre pipeline transforme les documents d'analyses médicales en rapports structurés et interprétés. L'architecture se divise en 4 parties principales, permettant un traitement progressif des données.
 
-.. figure:: /Documentation/Images/pipeline.png
+.. figure:: /Documentation/Images/pipeline.jpeg
    :alt: Pipeline de traitement
    :align: center
    :width: 100%
