@@ -6,13 +6,13 @@ Déploiement
 -------------------------
 L'interface permet d'analyser les documents médicaux à travers un workflow simple. 
 
-.. figure:: /Medical_Analyzer/Docs/Images/rapport_success.png
+.. figure:: /Documentation/Images/rapport_success.png
    :alt: Message de succès du rapport
    :align: center
 
    Message de succès après génération du rapport
 
-.. figure:: /Medical_Analyzer/Docs/Images/interface_principale.png
+.. figure:: /Documentation/Images/interface_principale.png
    :alt: Interface principale
    :align: center
 
@@ -22,13 +22,13 @@ L'interface permet d'analyser les documents médicaux à travers un workflow sim
 ---------------------
 Une fois le document téléchargé, trois actions sont disponibles :
 
-.. figure:: /Medical_Analyzer/Docs/Images/extraction_texte.png
+.. figure:: /Documentation/Images/extraction_texte.png
    :alt: Extraction de texte
    :align: center
 
    Le bouton "Extraire le texte" lance notre OCR
 
-.. figure:: /Medical_Analyzer/Docs/Images/organisation_donnees.png
+.. figure:: /Documentation/Images/organisation_donnees.png
    :alt: Organisation des données
    :align: center
 
@@ -44,7 +44,7 @@ Une fois le document téléchargé, trois actions sont disponibles :
 ---------------------------
 Le système valide chaque paramètre :
 
-.. figure:: /Medical_Analyzer/Docs/Images/exemple_analyse.png
+.. figure:: /Documentation/Images/exemple_analyse.png
    :alt: Exemple d'analyse
    :align: center
 
@@ -57,7 +57,7 @@ Le rapport généré inclut :
 - Identification des anomalies
 - Propositions de suivi
 
-.. figure:: /Medical_Analyzer/Docs/Images/rapport_final.png  
+.. figure:: /Documentation/Images/rapport_final.png  
    :alt: Rapport final
    :align: center
 
