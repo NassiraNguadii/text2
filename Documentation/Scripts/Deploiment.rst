@@ -27,7 +27,7 @@ Interface et Déploiement de l'Analyseur Médical
 --------------------
 L'interface d'analyse d'examens médicaux est une application web développée avec Streamlit qui permet l'analyse automatisée des résultats d'analyses sanguines. Elle intègre nos modèles OCR et d'analyse précédemment développés.
 
-.. figure::  /Documentation/Images/interface_principale.jpg
+.. figure::  /Documentation/Images/interface_principale.jpeg
    :alt: Interface Principale de l'Application
    :align: center
    :width: 100%
@@ -43,7 +43,7 @@ L'interface se compose de plusieurs modules interconnectés:
    - Formats supportés: PNG, JPG, JPEG, PDF, TXT, DOCX
    - Interface drag & drop intuitive
 
-.. figure::  /Documentation/Images/extraction_text.jpg
+.. figure::  /Documentation/Images/extraction_text.jpeg
    :alt: Interface d'upload et d'extraction
    :align: center
    :width: 100%
@@ -58,7 +58,7 @@ Processus d'Analyse
 
 1. **Upload et Extraction du Texte**
 
-.. figure::  /Documentation/Images/biochimie_scan.jpg
+.. figure::  /Documentation/Images/biochimie_scan.jpeg
    :alt: Exemple de scan d'analyse biochimique
    :align: center
    :width: 100%
@@ -67,7 +67,7 @@ Processus d'Analyse
 
 2. **Organisation des Données**
 
-.. figure::  /Documentation/Images/organisation_data.jpg
+.. figure::  /Documentation/Images/organisation_data.jpeg
    :alt: Organisation des données extraites
    :align: center
    :width: 100%
@@ -76,7 +76,7 @@ Processus d'Analyse
 
 3. **Analyse et Résultats**
 
-.. figure::  /Documentation/Images/analyse_results.jpg
+.. figure::  /Documentation/Images/analyse_results.jpeg
    :alt: Résultats de l'analyse
    :align: center
    :width: 100%
@@ -85,7 +85,7 @@ Processus d'Analyse
 
 4. **Génération du Rapport**
 
-.. figure::  /Documentation/Images/rapport_success.jpg
+.. figure::  /Documentation/Images/rapport_success.jpeg
    :alt: Génération du rapport
    :align: center
    :width: 100%
