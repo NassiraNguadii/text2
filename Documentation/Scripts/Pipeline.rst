@@ -1,6 +1,6 @@
 =================================================
-Pipeline de Traitement des Analyses Médicales
-=================================================
+Pipeline 
+========
 
 .. role:: red
    :class: red
