@@ -1,70 +1,140 @@
 =================================================
-Déploiement
+Interface et Déploiement de l'Analyseur Médical
 =================================================
 
-:blue:`Interface Développée`
--------------------------
-L'interface permet d'analyser les documents médicaux à travers un workflow simple. 
+.. role:: red
+   :class: red
 
-.. figure:: /Documentation/Images/rapport_success.png
-   :alt: Message de succès du rapport
-   :align: center
+.. role:: green
+   :class: green
 
-   Message de succès après génération du rapport
+.. role:: blue
+   :class: blue
 
-.. figure:: /Documentation/Images/interface_principale.png
-   :alt: Interface principale
-   :align: center
+.. role:: orange
+   :class: orange
 
-   Interface principale avec zone de dépôt de fichiers
+.. raw:: html
 
-:green:`Fonctionnalités`
----------------------
-Une fois le document téléchargé, trois actions sont disponibles :
+   <style>
+   .red {color: #FF4444;}
+   .green {color: #2ECC71;}
+   .blue {color: #3498DB;}
+   .orange {color: #E67E22;}
+   </style>
 
-.. figure:: /Documentation/Images/extraction_texte.png
-   :alt: Extraction de texte
-   :align: center
-
-   Le bouton "Extraire le texte" lance notre OCR
-
-.. figure:: /Documentation/Images/organisation_donnees.png
-   :alt: Organisation des données
-   :align: center
-
-   L'organisation structure automatiquement les données extraites
-
-.. figure:: /Medical_Analyzer/Docs/Images/analyse_resultat.png
-   :alt: Résultat d'analyse
-   :align: center
-
-   L'analyse compare les valeurs avec les normes
-
-:orange:`Exemples de Résultats`
----------------------------
-Le système valide chaque paramètre :
-
-.. figure:: /Documentation/Images/exemple_analyse.png
-   :alt: Exemple d'analyse
-   :align: center
-
-   Analyse d'une biochimie avec validation des valeurs
-
-:red:`Format du Rapport`
+:blue:`Vue d'Ensemble`
 --------------------
-Le rapport généré inclut :
-- Validation des valeurs par rapport aux normes
-- Identification des anomalies
-- Propositions de suivi
+L'interface d'analyse d'examens médicaux est une application web développée avec Streamlit qui permet l'analyse automatisée des résultats d'analyses sanguines. Elle intègre nos modèles OCR et d'analyse précédemment développés.
 
-.. figure:: /Documentation/Images/rapport_final.png  
-   :alt: Rapport final
+.. figure::  /Documentation/Images/interface_principale.jpg
+   :alt: Interface Principale de l'Application
    :align: center
+   :width: 100%
 
-   Format du rapport généré
+   Interface principale de l'application d'analyse d'examens médicaux
 
-:blue:`Aspects Techniques`
-----------------------
-- OCR : Doctr (84% précision)
-- Dataset : MedAnalyzer
-- Performance : ~45s par analyse
+:green:`Architecture de l'Interface`
+--------------------------------
+L'interface se compose de plusieurs modules interconnectés:
+
+1. **Module d'Upload**
+   - Limite de taille: 200MB par fichier
+   - Formats supportés: PNG, JPG, JPEG, PDF, TXT, DOCX
+   - Interface drag & drop intuitive
+
+.. figure::  /Documentation/Images/extraction_text.jpg
+   :alt: Interface d'upload et d'extraction
+   :align: center
+   :width: 100%
+
+   Module d'upload avec extraction de texte
+
+:orange:`Workflow de l'Application`
+-------------------------------
+
+Processus d'Analyse
+~~~~~~~~~~~~~~~~~~
+
+1. **Upload et Extraction du Texte**
+
+.. figure::  /Documentation/Images/biochimie_scan.jpg
+   :alt: Exemple de scan d'analyse biochimique
+   :align: center
+   :width: 100%
+
+   Exemple de document d'analyse biochimique scanné
+
+2. **Organisation des Données**
+
+.. figure::  /Documentation/Images/organisation_data.jpg
+   :alt: Organisation des données extraites
+   :align: center
+   :width: 100%
+
+   Interface d'organisation des données extraites
+
+3. **Analyse et Résultats**
+
+.. figure::  /Documentation/Images/analyse_results.jpg
+   :alt: Résultats de l'analyse
+   :align: center
+   :width: 100%
+
+   Affichage des résultats de l'analyse
+
+4. **Génération du Rapport**
+
+.. figure::  /Documentation/Images/rapport_success.jpg
+   :alt: Génération du rapport
+   :align: center
+   :width: 100%
+
+   Confirmation de génération du rapport
+
+:blue:`Fonctionnalités Détaillées`
+------------------------------
+
+1. **Extraction de Texte**
+   L'interface permet l'extraction automatique du texte à partir des documents scannés. Le système utilise notre modèle OCR optimisé pour garantir une reconnaissance précise des données médicales.
+
+2. **Organisation des Données**
+   Les données extraites sont automatiquement structurées selon les catégories d'analyses (biochimie, hématologie, etc.).
+
+3. **Analyse Automatique**
+   Le système analyse les valeurs extraites en les comparant aux normes médicales standard et identifie les anomalies potentielles.
+
+4. **Génération de Rapports**
+   L'interface permet de générer des rapports détaillés incluant l'analyse complète des résultats.
+
+:green:`Guide d'Utilisation`
+------------------------
+
+1. **Téléchargement du Document**
+   - Utilisez l'interface drag & drop ou le bouton "Browse files"
+   - Formats acceptés: PNG, JPG, JPEG, PDF, TXT, DOCX
+   - Taille limite: 200MB par fichier
+
+2. **Extraction et Vérification**
+   - Cliquez sur "Extraire le texte"
+   - Vérifiez les données extraites
+   - Utilisez "Organiser" pour structurer l'information
+
+3. **Analyse des Résultats**
+   - Lancez l'analyse avec le bouton "Analyser"
+   - Examinez les résultats et les alertes
+   - Générez le rapport final
+
+:red:`Points d'Attention`
+---------------------
+- Qualité des scans requise: minimum 300 DPI
+- Orientation correcte des documents
+- Vérification manuelle des valeurs critiques
+- Sauvegarde systématique des rapports générés
+
+
+
+
+:green:`Conclusion`
+--------------
+Cette interface représente l'aboutissement de notre travail sur l'OCR médical et l'analyse automatisée. Elle combine nos différents modules dans une solution intégrée et facile d'utilisation, tout en maintenant la rigueur nécessaire au domaine médical.
