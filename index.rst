@@ -21,6 +21,7 @@ Bienvenue à Textra-Health's documentation!
    Documentation/Scripts/modele.rst
    Documentation/Scripts/embedding.rst
    Documentation/Scripts/Deploiment.rst
+      Documentation/Scripts/Perspectives.rst
 
    
    
