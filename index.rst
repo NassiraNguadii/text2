@@ -20,6 +20,8 @@ Bienvenue à Textra-Health's documentation!
    Documentation/Scripts/Qlora.rst
    Documentation/Scripts/modele.rst
    Documentation/Scripts/embedding.rst
+   Documentation/Scripts/Deploiment.rst
+
    
    
    
